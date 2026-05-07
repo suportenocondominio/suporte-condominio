@@ -1352,3 +1352,205 @@ a {
     background: #ffffff;
   }
 }
+
+.appMode {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #edf2f8;
+  padding: 24px 18px 110px;
+}
+
+.appMode * {
+  box-sizing: border-box;
+}
+
+.appHeader,
+.appHero,
+.appGrid,
+.appServices,
+.appHow,
+.bottomNav {
+  width: 100%;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.appHeader {
+  background: var(--navy);
+  border-radius: 28px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: white;
+  margin-bottom: 18px;
+}
+
+.appLogo {
+  width: 74px;
+  height: 74px;
+  object-fit: contain;
+  background: white;
+  border-radius: 22px;
+  padding: 8px;
+}
+
+.appHeader h1 {
+  font-size: 22px;
+  line-height: 1.1;
+  color: white;
+}
+
+.appHeader span {
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+.appHero {
+  background: white;
+  border-radius: 28px;
+  padding: 26px;
+  box-shadow: 0 14px 36px rgba(7, 27, 58, 0.12);
+  margin-bottom: 18px;
+}
+
+.appHero h2 {
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+
+.appHero p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.appGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.appCard {
+  min-width: 0;
+  background: white;
+  border-radius: 24px;
+  padding: 22px 16px;
+  min-height: 150px;
+  box-shadow: 0 12px 28px rgba(7, 27, 58, 0.1);
+  color: var(--navy);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.appCard svg {
+  color: var(--green-dark);
+}
+
+.appCard strong {
+  font-size: 17px;
+  color: var(--navy);
+}
+
+.appCard span {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.appPrimary {
+  background: linear-gradient(135deg, var(--green), #2ff0a4);
+}
+
+.appPrimary svg,
+.appPrimary strong,
+.appPrimary span {
+  color: var(--navy);
+}
+
+.appServices {
+  margin-top: 8px;
+}
+
+.appServices .sectionHeader {
+  text-align: left;
+  margin: 0 0 18px;
+}
+
+.appServices .sectionHeader h2 {
+  font-size: 26px;
+  color: var(--navy) !important;
+}
+
+.appServices .servicesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.appServices .serviceCard {
+  min-height: auto;
+  padding: 22px;
+  border-radius: 24px;
+}
+
+.appServices .serviceCard h3 {
+  font-size: 18px;
+}
+
+.appServices .serviceCard p {
+  font-size: 15px;
+}
+
+.appHow {
+  display: block;
+  padding: 28px 22px;
+  border-radius: 28px;
+  margin-top: 28px;
+}
+
+.appHow .howText h2 {
+  font-size: 28px;
+}
+
+.appHow .steps {
+  grid-template-columns: 1fr;
+  margin-top: 22px;
+}
+
+.bottomNav {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  width: calc(100% - 28px);
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(14px);
+  border-radius: 24px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-around;
+  box-shadow: 0 16px 40px rgba(7, 27, 58, 0.2);
+  z-index: 999;
+}
+
+.bottomNav a {
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.bottomNav svg {
+  color: var(--green-dark);
+}
