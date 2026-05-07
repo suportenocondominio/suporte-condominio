@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
 
@@ -27,8 +26,6 @@ import {
 } from 'lucide-react'
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
-
   const whatsappBase = 'https://wa.me/5511952491217'
   const whatsapp = `${whatsappBase}?text=${encodeURIComponent(
     'Olá! Vim pelo site Suporte no Condomínio e gostaria de solicitar um atendimento.'
@@ -43,9 +40,9 @@ function App() {
     },
     {
       icon: <Wifi size={30} />,
-      title: 'Wi-Fi e internet',
+      title: 'Wi‑Fi e internet',
       desc: 'Configuração de roteadores, mesh e melhoria de sinal.',
-      message: 'Olá! Gostaria de ajuda com Wi-Fi, internet ou roteador.',
+      message: 'Olá! Gostaria de ajuda com Wi‑Fi, internet ou roteador.',
     },
     {
       icon: <Camera size={30} />,
@@ -95,7 +92,7 @@ function App() {
     },
     {
       name: 'Renata — Vila Galvão',
-      text: 'Meu Wi-Fi vivia caindo. Depois da visita, o sinal melhorou muito no apartamento todo.',
+      text: 'Meu Wi‑Fi vivia caindo. Depois da visita, o sinal melhorou muito no apartamento todo.',
     },
     {
       name: 'Felipe — Centro de Guarulhos',
@@ -125,8 +122,6 @@ function App() {
   const serviceWhatsapp = (message) =>
     `${whatsappBase}?text=${encodeURIComponent(message)}`
 
-  const closeMenu = () => setMenuOpen(false)
-
   return (
     <main>
       {/* HEADER */}
@@ -147,30 +142,7 @@ function App() {
           <MessageCircle size={18} />
           WhatsApp
         </a>
-
-        <button
-          className="mobileMenuButton"
-          type="button"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
-        >
-          {menuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
       </header>
-
-      {menuOpen && (
-        <nav className="mobileMenu">
-          <a href="#servicos" onClick={closeMenu}>Serviços</a>
-          <a href="#como-funciona" onClick={closeMenu}>Como funciona</a>
-          <a href="#depoimentos" onClick={closeMenu}>Depoimentos</a>
-          <a href="#duvidas" onClick={closeMenu}>Dúvidas</a>
-          <a href="#contato" onClick={closeMenu}>Contato</a>
-          <a className="mobileMenuWhatsapp" href={whatsapp} target="_blank" rel="noreferrer" onClick={closeMenu}>
-            <MessageCircle size={18} />
-            Chamar no WhatsApp
-          </a>
-        </nav>
-      )}
 
       {/* HERO */}
       <section className="hero">
@@ -183,7 +155,7 @@ function App() {
           <h1>Tecnologia e suporte residencial sem complicação.</h1>
 
           <p>
-            Suporte técnico para informática, Wi-Fi, câmeras, elétrica e segurança
+            Suporte técnico para informática, Wi‑Fi, câmeras, elétrica e segurança
             digital, com atendimento próximo, confiável e fácil de acionar.
           </p>
 
@@ -251,7 +223,7 @@ function App() {
         <div>
           <Wrench size={22} />
           <strong>Serviços práticos</strong>
-          <span>Do computador ao Wi-Fi da casa.</span>
+          <span>Do computador ao Wi‑Fi da casa.</span>
         </div>
 
         <div>
