@@ -1,0 +1,439 @@
+import './App.css'
+import logo from './assets/logo.png'
+
+import {
+  ShieldCheck,
+  Wifi,
+  Camera,
+  Plug,
+  Laptop,
+  HardDrive,
+  MessageCircle,
+  ChevronRight,
+  CheckCircle2,
+  Clock3,
+  Star,
+  Phone,
+  MapPin,
+  Sparkles,
+  Zap,
+  HelpCircle,
+  Wrench,
+  Home,
+  Quote,
+} from 'lucide-react'
+
+function App() {
+  const whatsappBase = 'https://wa.me/5511952491217'
+  const whatsapp = `${whatsappBase}?text=${encodeURIComponent(
+    'Olá! Vim pelo site Suporte no Condomínio e gostaria de solicitar um atendimento.'
+  )}`
+
+  const services = [
+    {
+      icon: <Laptop size={30} />,
+      title: 'Suporte para computadores',
+      desc: 'Notebook lento, travando ou precisando de manutenção.',
+      message: 'Olá! Gostaria de solicitar suporte para computador/notebook.',
+    },
+    {
+      icon: <Wifi size={30} />,
+      title: 'Wi‑Fi e internet',
+      desc: 'Configuração de roteadores, mesh e melhoria de sinal.',
+      message: 'Olá! Gostaria de ajuda com Wi‑Fi, internet ou roteador.',
+    },
+    {
+      icon: <Camera size={30} />,
+      title: 'Câmeras de segurança',
+      desc: 'Instalação e configuração com acesso pelo celular.',
+      message: 'Olá! Gostaria de atendimento para câmeras de segurança.',
+    },
+    {
+      icon: <Plug size={30} />,
+      title: 'Elétrica residencial',
+      desc: 'Tomadas, iluminação e pequenos reparos.',
+      message: 'Olá! Gostaria de atendimento para elétrica residencial.',
+    },
+    {
+      icon: <ShieldCheck size={30} />,
+      title: 'Segurança digital',
+      desc: 'Proteção contra golpes, vírus e perda de dados.',
+      message: 'Olá! Gostaria de ajuda com segurança digital.',
+    },
+    {
+      icon: <HardDrive size={30} />,
+      title: 'Backup e upgrade',
+      desc: 'SSD, memória e proteção dos seus arquivos.',
+      message: 'Olá! Gostaria de atendimento para backup ou upgrade.',
+    },
+  ]
+
+  const steps = [
+    {
+      title: 'Chame no WhatsApp',
+      desc: 'Você fala direto com nossa equipe, sem burocracia.',
+    },
+    {
+      title: 'Explique o problema',
+      desc: 'Avaliamos o cenário e indicamos o melhor caminho.',
+    },
+    {
+      title: 'Agende o atendimento',
+      desc: 'Combinamos o melhor horário para resolver no local.',
+    },
+  ]
+
+  const testimonials = [
+    {
+      name: 'Marcos — Bosque Maia',
+      text: 'Atendimento rápido, organizado e com explicação simples. Resolveram o problema sem enrolação.',
+    },
+    {
+      name: 'Renata — Vila Galvão',
+      text: 'Meu Wi‑Fi vivia caindo. Depois da visita, o sinal melhorou muito no apartamento todo.',
+    },
+    {
+      name: 'Felipe — Centro de Guarulhos',
+      text: 'Gostei porque o atendimento foi claro, pontual e passou confiança desde o primeiro contato.',
+    },
+  ]
+
+  const faqs = [
+    {
+      question: 'Vocês atendem dentro de condomínios?',
+      answer: 'Sim. O atendimento é pensado para moradores de condomínios, apartamentos e residências.',
+    },
+    {
+      question: 'Atendem quais regiões?',
+      answer: 'Atendemos Guarulhos e região, conforme disponibilidade de agenda.',
+    },
+    {
+      question: 'O orçamento é feito pelo WhatsApp?',
+      answer: 'Sim. Primeiro entendemos o problema e, quando necessário, alinhamos a visita técnica.',
+    },
+    {
+      question: 'Vocês configuram câmeras e acesso pelo celular?',
+      answer: 'Sim. Fazemos instalação, configuração e orientação de uso no aplicativo.',
+    },
+  ]
+
+  const serviceWhatsapp = (message) =>
+    `${whatsappBase}?text=${encodeURIComponent(message)}`
+
+  return (
+    <main>
+      {/* HEADER */}
+      <header className="topbar fadeDown">
+        <div className="brand">
+          <img src={logo} alt="Suporte no Condomínio" className="logo" />
+        </div>
+
+        <nav className="menu">
+          <a href="#servicos">Serviços</a>
+          <a href="#como-funciona">Como funciona</a>
+          <a href="#depoimentos">Depoimentos</a>
+          <a href="#duvidas">Dúvidas</a>
+          <a href="#contato">Contato</a>
+        </nav>
+
+        <a className="topButton" href={whatsapp} target="_blank" rel="noreferrer">
+          <MessageCircle size={18} />
+          WhatsApp
+        </a>
+      </header>
+
+      {/* HERO */}
+      <section className="hero">
+        <div className="heroText fadeUp">
+          <div className="badge">
+            <CheckCircle2 size={18} />
+            Atendimento rápido em condomínios
+          </div>
+
+          <h1>Tecnologia e suporte residencial sem complicação.</h1>
+
+          <p>
+            Suporte técnico para informática, Wi‑Fi, câmeras, elétrica e segurança
+            digital, com atendimento próximo, confiável e fácil de acionar.
+          </p>
+
+          <div className="heroActions">
+            <a className="button" href={whatsapp} target="_blank" rel="noreferrer">
+              <MessageCircle size={20} />
+              Solicitar atendimento
+            </a>
+
+            <a className="phoneLink" href="tel:11952491217">
+              <Phone size={18} />
+              11 95249-1217
+            </a>
+          </div>
+
+          <div className="heroStats">
+            <div>
+              <strong>+500</strong>
+              <span>Atendimentos</span>
+            </div>
+
+            <div>
+              <strong>4.9★</strong>
+              <span>Avaliação média</span>
+            </div>
+
+            <div>
+              <strong>Rápido</strong>
+              <span>Agendamento fácil</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="heroImage fadeUp delayOne">
+          <img
+            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
+            alt="Suporte técnico residencial"
+          />
+
+          <div className="floatingCard floatingOne">
+            <Zap size={18} />
+            Atendimento rápido
+          </div>
+
+          <div className="floatingCard floatingTwo">
+            <ShieldCheck size={18} />
+            Suporte confiável
+          </div>
+
+          <div className="floatingCard floatingThree">
+            <Home size={18} />
+            Em condomínios
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURE STRIP */}
+      <section className="featureStrip fadeUp delayTwo">
+        <div>
+          <Sparkles size={22} />
+          <strong>Atendimento humanizado</strong>
+          <span>Sem termos técnicos complicados.</span>
+        </div>
+
+        <div>
+          <Wrench size={22} />
+          <strong>Serviços práticos</strong>
+          <span>Do computador ao Wi‑Fi da casa.</span>
+        </div>
+
+        <div>
+          <MapPin size={22} />
+          <strong>Guarulhos e região</strong>
+          <span>Agenda pensada para atendimento local.</span>
+        </div>
+      </section>
+
+      {/* SERVICES */}
+      <section className="services" id="servicos">
+        <div className="sectionHeader fadeUp">
+          <span>Nossos serviços</span>
+          <h2>Soluções técnicas especializadas</h2>
+          <p>Atendimento residencial com foco em praticidade, rapidez e confiança.</p>
+        </div>
+
+        <div className="servicesGrid">
+          {services.map((service, index) => (
+            <a
+              className="serviceCard fadeUp"
+              style={{ animationDelay: `${index * 0.08}s` }}
+              key={service.title}
+              href={serviceWhatsapp(service.message)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div className="serviceIcon">{service.icon}</div>
+
+              <h3>{service.title}</h3>
+
+              <p>{service.desc}</p>
+
+              <div className="serviceFooter">
+                <span>Solicitar serviço</span>
+                <ChevronRight size={18} />
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="how" id="como-funciona">
+        <div className="howText fadeUp">
+          <span>Como funciona</span>
+
+          <h2>Atendimento simples, rápido e sem burocracia</h2>
+
+          <p>
+            Você chama no WhatsApp, explica o problema e nossa equipe agenda o
+            melhor horário para atendimento técnico.
+          </p>
+        </div>
+
+        <div className="steps">
+          {steps.map((step, index) => (
+            <div className="step fadeUp" style={{ animationDelay: `${index * 0.1}s` }} key={step.title}>
+              <div className="stepNumber">0{index + 1}</div>
+              <strong>{step.title}</strong>
+              <p>{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TRUST */}
+      <section className="trust">
+        <div className="trustImage fadeUp">
+          <img
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop"
+            alt="Equipe técnica"
+          />
+        </div>
+
+        <div className="trustContent fadeUp delayOne">
+          <span>Por que escolher a gente?</span>
+
+          <h2>Equipe qualificada e atendimento confiável</h2>
+
+          <p>
+            Trabalhamos com foco em qualidade, transparência e experiência do
+            cliente. O objetivo é resolver o problema e explicar tudo de forma simples.
+          </p>
+
+          <div className="trustItems">
+            <div>
+              <Star size={22} />
+              <strong>Experiência</strong>
+              <small>Atendimento técnico prático.</small>
+            </div>
+
+            <div>
+              <ShieldCheck size={22} />
+              <strong>Segurança</strong>
+              <small>Cuidado com dados e equipamentos.</small>
+            </div>
+
+            <div>
+              <Clock3 size={22} />
+              <strong>Rapidez</strong>
+              <small>Contato direto pelo WhatsApp.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="testimonials" id="depoimentos">
+        <div className="sectionHeader fadeUp">
+          <span>Clientes</span>
+          <h2>Quem já utilizou recomenda</h2>
+          <p>Depoimentos que reforçam confiança, proximidade e qualidade no atendimento.</p>
+        </div>
+
+        <div className="testimonialGrid">
+          {testimonials.map((item, index) => (
+            <div className="testimonialCard fadeUp" style={{ animationDelay: `${index * 0.1}s` }} key={item.name}>
+              <Quote size={28} />
+              <p>{item.text}</p>
+              <strong>{item.name}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* APP DOWNLOAD */}
+      <section className="appDownload">
+        <div className="fadeUp">
+          <span>Aplicativo</span>
+
+          <h2>Baixe o app Suporte no Condomínio</h2>
+
+          <p>
+            Solicite atendimento, acompanhe chamados e fale com nossa equipe direto
+            pelo aplicativo.
+          </p>
+        </div>
+
+        <div className="storeButtons fadeUp delayOne">
+          <a href="#" className="storeButton" aria-label="Baixar na App Store">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+              alt="Apple"
+              className="storeRealIcon appleIcon"
+            />
+
+            <div>
+              <small>Baixar na</small>
+              <strong>App Store</strong>
+            </div>
+          </a>
+
+          <a href="#" className="storeButton googleButton" aria-label="Baixar no Google Play">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+              alt="Google Play"
+              className="googlePlayBadge"
+            />
+          </a>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="faq" id="duvidas">
+        <div className="sectionHeader fadeUp">
+          <span>Dúvidas frequentes</span>
+          <h2>Antes de chamar o suporte</h2>
+          <p>Algumas respostas rápidas para facilitar seu primeiro contato.</p>
+        </div>
+
+        <div className="faqGrid">
+          {faqs.map((faq, index) => (
+            <details className="faqItem fadeUp" style={{ animationDelay: `${index * 0.08}s` }} key={faq.question}>
+              <summary>
+                <HelpCircle size={20} />
+                {faq.question}
+              </summary>
+              <p>{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="cta" id="contato">
+        <div className="fadeUp">
+          <span>Precisa de ajuda?</span>
+
+          <h2>Solicite um atendimento agora mesmo</h2>
+
+          <p>Fale com nossa equipe pelo WhatsApp e receba um atendimento rápido.</p>
+        </div>
+
+        <a className="button buttonLarge fadeUp delayOne" href={whatsapp} target="_blank" rel="noreferrer">
+          <MessageCircle size={22} />
+          Chamar no WhatsApp
+        </a>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <img src={logo} alt="Logo" className="footerLogo" />
+
+        <p>© 2025 Suporte no Condomínio · Atendimento residencial em Guarulhos e região.</p>
+      </footer>
+
+      <a className="whatsappFloat" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Chamar no WhatsApp">
+        <MessageCircle size={30} />
+      </a>
+    </main>
+  )
+}
+
+export default App
