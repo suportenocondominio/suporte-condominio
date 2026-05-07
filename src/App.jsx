@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
+import ChamadoForm from './components/ChamadoForm'
 
 import {
   ShieldCheck,
@@ -158,6 +159,8 @@ function App() {
             equipe rapidamente.
           </p>
         </section>
+
+<ChamadoForm />
 
         <section className="appGrid">
           <a href={whatsapp} target="_blank" rel="noreferrer" className="appCard appPrimary">
