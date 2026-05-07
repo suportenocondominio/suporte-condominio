@@ -90,15 +90,15 @@ function App() {
 
   const testimonials = [
     {
-      name: 'Marcos — Bosque Maia',
+      name: 'Marcos Oliveira — Parque Renato Maia',
       text: 'Atendimento rápido, organizado e com explicação simples. Resolveram o problema sem enrolação.',
     },
     {
-      name: 'Renata — Vila Galvão',
+      name: 'Renata Almeida — Vila Galvão',
       text: 'Meu Wi-Fi vivia caindo. Depois da visita, o sinal melhorou muito no apartamento todo.',
     },
     {
-      name: 'Felipe — Centro de Guarulhos',
+      name: 'Felipe Guimarães — Centro de Guarulhos',
       text: 'Gostei porque o atendimento foi claro, pontual e passou confiança desde o primeiro contato.',
     },
   ]
