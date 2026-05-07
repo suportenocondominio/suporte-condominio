@@ -598,6 +598,22 @@ function App() {
       <a className="whatsappFloat" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Chamar no WhatsApp">
         <MessageCircle size={30} />
       </a>
+
+{showChamado && (
+  <div className="modalOverlay">
+    <div className="modalContent">
+      <button
+        className="closeModal"
+        onClick={() => setShowChamado(false)}
+      >
+        ×
+      </button>
+
+      <ChamadoForm />
+    </div>
+  </div>
+)}
+
     </main>
   )
 }
