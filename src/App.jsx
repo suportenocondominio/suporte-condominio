@@ -30,6 +30,7 @@ import {
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [isAppMode, setIsAppMode] = useState(false)
+  const [showChamado, setShowChamado] = useState(false)
 
  useEffect(() => {
   const params = new URLSearchParams(window.location.search)
@@ -160,7 +161,12 @@ function App() {
           </p>
         </section>
 
-<ChamadoForm />
+<button
+  className="appOpenTicketButton"
+  onClick={() => setShowChamado(true)}
+>
+  Abrir chamado
+</button>
 
         <section className="appGrid">
           <a href={whatsapp} target="_blank" rel="noreferrer" className="appCard appPrimary">
@@ -248,7 +254,24 @@ function App() {
             <span>Serviços</span>
           </a>
         </nav>
-      </main>
+      
+
+      {showChamado && (
+  <div className="modalOverlay">
+    <div className="modalContent appModalContent">
+      <button
+        className="closeModal"
+        onClick={() => setShowChamado(false)}
+      >
+        ×
+      </button>
+
+      <ChamadoForm />
+    </div>
+  </div>
+  
+)}
+</main>
     )
   }
 
@@ -311,10 +334,13 @@ function App() {
           </p>
 
           <div className="heroActions">
-            <a className="button" href={whatsapp} target="_blank" rel="noreferrer">
-              <MessageCircle size={20} />
-              Solicitar atendimento
-            </a>
+           <button
+  className="button"
+  onClick={() => setShowChamado(true)}
+>
+  <MessageCircle size={20} />
+  Abrir chamado
+</button>
 
             <a className="phoneLink" href="tel:11952491217">
               <Phone size={18} />
