@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
 
@@ -28,10 +28,19 @@ import {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isAppMode, setIsAppMode] = useState(false)
+
+  useEffect(() => {
+    const standalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+
+    setIsAppMode(standalone)
+  }, [])
 
   const whatsappBase = 'https://wa.me/5511952491217'
   const whatsapp = `${whatsappBase}?text=${encodeURIComponent(
-    'Olá! Vim pelo site Suporte no Condomínio e gostaria de solicitar um atendimento.'
+    'Olá! Vim pelo site/app Suporte no Condomínio e gostaria de solicitar um atendimento.'
   )}`
 
   const services = [
@@ -127,9 +136,118 @@ function App() {
 
   const closeMenu = () => setMenuOpen(false)
 
+  if (isAppMode) {
+    return (
+      <main className="appMode">
+        <header className="appHeader">
+          <img src={logo} alt="Logo" className="appLogo" />
+
+          <div>
+            <h1>Suporte no Condomínio</h1>
+            <span>Atendimento rápido</span>
+          </div>
+        </header>
+
+        <section className="appHero">
+          <h2>Como podemos ajudar?</h2>
+          <p>
+            Solicite suporte técnico, atendimento residencial e fale com nossa
+            equipe rapidamente.
+          </p>
+        </section>
+
+        <section className="appGrid">
+          <a href={whatsapp} target="_blank" rel="noreferrer" className="appCard appPrimary">
+            <MessageCircle size={36} />
+            <strong>WhatsApp</strong>
+            <span>Atendimento imediato</span>
+          </a>
+
+          <a href="#servicos" className="appCard">
+            <Laptop size={30} />
+            <strong>Serviços</strong>
+            <span>Veja os atendimentos</span>
+          </a>
+
+          <a href="#como-funciona" className="appCard">
+            <Wrench size={30} />
+            <strong>Como funciona</strong>
+            <span>Entenda o processo</span>
+          </a>
+
+          <a href="tel:11952491217" className="appCard">
+            <Phone size={30} />
+            <strong>Ligar</strong>
+            <span>Contato direto</span>
+          </a>
+        </section>
+
+        <section className="appServices" id="servicos">
+          <div className="sectionHeader">
+            <span>Serviços</span>
+            <h2>Atendimento residencial</h2>
+          </div>
+
+          <div className="servicesGrid">
+            {services.map((service) => (
+              <a
+                className="serviceCard"
+                key={service.title}
+                href={serviceWhatsapp(service.message)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="serviceIcon">{service.icon}</div>
+                <h3>{service.title}</h3>
+                <p>{service.desc}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section className="how appHow" id="como-funciona">
+          <div className="howText">
+            <span>Como funciona</span>
+            <h2>Atendimento simples e rápido</h2>
+            <p>
+              Você chama no WhatsApp, explica o problema e nossa equipe agenda o
+              melhor horário para atendimento.
+            </p>
+          </div>
+
+          <div className="steps">
+            {steps.map((step, index) => (
+              <div className="step" key={step.title}>
+                <div className="stepNumber">0{index + 1}</div>
+                <strong>{step.title}</strong>
+                <p>{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <nav className="bottomNav">
+          <a href="#">
+            <Home size={22} />
+            <span>Início</span>
+          </a>
+
+          <a href={whatsapp} target="_blank" rel="noreferrer">
+            <MessageCircle size={22} />
+            <span>WhatsApp</span>
+          </a>
+
+          <a href="#servicos">
+            <Wrench size={22} />
+            <span>Serviços</span>
+          </a>
+        </nav>
+      </main>
+    )
+  }
+
   return (
     <main>
-      {/* HEADER */}
       <header className="topbar fadeDown">
         <div className="brand">
           <img src={logo} alt="Suporte no Condomínio" className="logo" />
@@ -172,7 +290,6 @@ function App() {
         </nav>
       )}
 
-      {/* HERO */}
       <section className="hero">
         <div className="heroText fadeUp">
           <div className="badge">
@@ -240,7 +357,6 @@ function App() {
         </div>
       </section>
 
-      {/* FEATURE STRIP */}
       <section className="featureStrip fadeUp delayTwo">
         <div>
           <Sparkles size={22} />
@@ -261,7 +377,6 @@ function App() {
         </div>
       </section>
 
-      {/* SERVICES */}
       <section className="services" id="servicos">
         <div className="sectionHeader fadeUp">
           <span>Nossos serviços</span>
@@ -280,9 +395,7 @@ function App() {
               rel="noreferrer"
             >
               <div className="serviceIcon">{service.icon}</div>
-
               <h3>{service.title}</h3>
-
               <p>{service.desc}</p>
 
               <div className="serviceFooter">
@@ -294,13 +407,10 @@ function App() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
       <section className="how" id="como-funciona">
         <div className="howText fadeUp">
           <span>Como funciona</span>
-
           <h2>Atendimento simples, rápido e sem burocracia</h2>
-
           <p>
             Você chama no WhatsApp, explica o problema e nossa equipe agenda o
             melhor horário para atendimento técnico.
@@ -318,7 +428,6 @@ function App() {
         </div>
       </section>
 
-      {/* TRUST */}
       <section className="trust">
         <div className="trustImage fadeUp">
           <img
@@ -359,7 +468,6 @@ function App() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
       <section className="testimonials" id="depoimentos">
         <div className="sectionHeader fadeUp">
           <span>Clientes</span>
@@ -378,7 +486,6 @@ function App() {
         </div>
       </section>
 
-      {/* APP DOWNLOAD */}
       <section className="appDownload">
         <div className="fadeUp">
           <span>Aplicativo</span>
@@ -415,7 +522,6 @@ function App() {
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="faq" id="duvidas">
         <div className="sectionHeader fadeUp">
           <span>Dúvidas frequentes</span>
@@ -436,7 +542,6 @@ function App() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="cta" id="contato">
         <div className="fadeUp">
           <span>Precisa de ajuda?</span>
@@ -452,7 +557,6 @@ function App() {
         </a>
       </section>
 
-      {/* FOOTER */}
       <footer className="footer">
         <img src={logo} alt="Logo" className="footerLogo" />
 
