@@ -991,7 +991,7 @@ a {
 
 @media (max-width: 980px) {
   .menu {
-    display: none;
+    display: flex;
   }
 
   .hero,
