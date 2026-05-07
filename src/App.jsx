@@ -30,13 +30,16 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [isAppMode, setIsAppMode] = useState(false)
 
-  useEffect(() => {
-    const standalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true
+ useEffect(() => {
+  const params = new URLSearchParams(window.location.search)
+  const appParam = params.get('app') === 'true'
 
-    setIsAppMode(standalone)
-  }, [])
+  const standalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true
+
+  setIsAppMode(appParam || standalone)
+}, [])
 
   const whatsappBase = 'https://wa.me/5511952491217'
   const whatsapp = `${whatsappBase}?text=${encodeURIComponent(

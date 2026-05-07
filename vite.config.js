@@ -22,7 +22,7 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'portrait',
 
-        start_url: '/',
+        start_url: '/?app=true',
 
         icons: [
           {
