@@ -6,6 +6,8 @@ import ChamadoForm from './components/ChamadoForm'
 import heroPremium from './assets/hero-premium.png'
 import logoPremium from './assets/logo-premium.png'
 import heroImage from './assets/hero-condominio.png'
+import LoginButton from './components/LoginButton'
+import { supabase } from './lib/supabase'
 
 import {
   ShieldCheck,
@@ -35,6 +37,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [isAppMode, setIsAppMode] = useState(false)
   const [showChamado, setShowChamado] = useState(false)
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -43,6 +46,17 @@ function App() {
       window.matchMedia('(display-mode: standalone)').matches ||
       window.navigator.standalone === true
     setIsAppMode(appParam || standalone)
+    supabase.auth.getUser().then(({ data }) => {
+  setUser(data.user)
+})
+
+const {
+  data: { subscription },
+} = supabase.auth.onAuthStateChange((_event, session) => {
+  setUser(session?.user ?? null)
+})
+
+return () => subscription.unsubscribe()
   }, [])
 
   const whatsappBase = 'https://wa.me/5511952491217'
@@ -235,18 +249,29 @@ function App() {
             <p>
               Suporte técnico para informática, Wi-Fi, câmeras,
               elétrica e segurança digital, com atendimento próximo,
-              confiável e fácil de acionar.
+              confiável e fácil de acionar. </p>
+              <p>
+              Abra seu chamado para maior agilidade 👇🏻
             </p>
-            <div className="premiumHeroButtons">
-              <button className="premiumPrimaryButton" onClick={() => setShowChamado(true)}>
-                <MessageCircle size={22} />
-                Abrir chamado
-              </button>
-              <a href="tel:11952491217" className="premiumPhoneButton">
-                <Phone size={20} />
-                11 95249-1217
-              </a>
-            </div>
+<div className="premiumHeroButtons">
+
+  {user ? (
+
+    <button
+      className="premiumPrimaryButton"
+      onClick={() => setShowChamado(true)}
+    >
+      <MessageCircle size={22} />
+      Abrir chamado
+    </button>
+
+  ) : (
+
+    <LoginButton />
+
+  )}
+
+</div>
           </div>
 
           <div className="premiumHeroImage">
