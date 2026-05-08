@@ -2103,3 +2103,32 @@ a {
     flex: 0 0 calc(50% - 14px);
   }
 }
+
+@media (max-width: 600px) {
+  .premiumHeroContent {
+    padding: 34px 40px 48px;
+    gap: 28px;
+  }
+
+  .premiumHeroImage {
+    margin-top: -10px;
+  }
+
+  .premiumHeroImage img {
+    max-height: 300px;
+    object-fit: contain;
+  }
+
+  .premiumStats {
+    display: none;
+  }
+
+  .appLogo {
+    width: 94px;
+    height: 94px;
+  }
+
+  .appHeader h1 {
+    font-size: 24px;
+  }
+}
