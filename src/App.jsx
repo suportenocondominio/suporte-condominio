@@ -477,10 +477,17 @@ function App() {
             <span>Chamados</span>
           </button>
 
-          <a href={whatsapp} target="_blank" rel="noreferrer">
-            <MessageCircle size={22} />
-            <span>WhatsApp</span>
-          </a>
+          <button
+  type="button"
+  onClick={() => {
+    if (user) {
+      setShowPerfilModal(true)
+    }
+  }}
+>
+  <User size={22} />
+  <span>Conta</span>
+</button>
         </nav>
 
         {showChamado && (

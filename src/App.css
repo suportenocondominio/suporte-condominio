@@ -2763,3 +2763,30 @@ cursor: pointer;
 .perfilLogoutButton:hover {
   background: #fee2e2;
 }
+
+.clienteRespostaBox textarea,
+.respostaBox textarea {
+  width: 100%;
+  min-height: 120px;
+  background: #ffffff !important;
+  color: #071b3a !important;
+  border: 1px solid #d7deea;
+  border-radius: 18px;
+  padding: 16px;
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+  caret-color: #071b3a;
+}
+
+.clienteRespostaBox textarea::placeholder,
+.respostaBox textarea::placeholder {
+  color: #7b8798 !important;
+}
+
+.clienteRespostaBox textarea:focus,
+.respostaBox textarea:focus {
+  border-color: #22d18b;
+  box-shadow: 0 0 0 4px rgba(34, 209, 139, 0.14);
+}
