@@ -2790,3 +2790,41 @@ cursor: pointer;
   border-color: #22d18b;
   box-shadow: 0 0 0 4px rgba(34, 209, 139, 0.14);
 }
+
+@media (max-width: 700px) {
+  .premiumTopbar {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 14px;
+    padding: 14px;
+    overflow: hidden;
+  }
+
+  .premiumMenu {
+    display: none !important;
+  }
+
+  .premiumBrand img {
+    height: 72px;
+    max-width: 210px;
+    object-fit: contain;
+  }
+
+  .premiumWhatsapp {
+    width: 120px;
+    max-width: 120px;
+    min-width: 120px;
+    height: 58px;
+    padding: 0;
+    border-radius: 18px;
+    font-size: 0;
+  }
+
+  .premiumWhatsapp svg {
+    width: 26px;
+    height: 26px;
+  }
+}
