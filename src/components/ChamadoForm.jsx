@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import LoginButton from './LoginButton'
 
 function ChamadoForm() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [user, setUser] = useState(null)
+  const [checkingUser, setCheckingUser] = useState(true)
 
   const [form, setForm] = useState({
     nome: '',
@@ -15,6 +18,24 @@ function ChamadoForm() {
     descricao: '',
   })
 
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getUser()
+      setUser(data.user)
+      setCheckingUser(false)
+    }
+
+    checkUser()
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -24,10 +45,22 @@ function ChamadoForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if (!user) {
+      alert('Você precisa entrar com Google antes de abrir um chamado.')
+      return
+    }
+
     setLoading(true)
     setSuccess(false)
 
-    const { error } = await supabase.from('chamados').insert([form])
+    const chamado = {
+      ...form,
+      user_id: user.id,
+      email: user.email,
+    }
+
+    const { error } = await supabase.from('chamados').insert([chamado])
 
     setLoading(false)
 
@@ -50,12 +83,31 @@ function ChamadoForm() {
     })
   }
 
+  if (checkingUser) {
+    return <p>Verificando login...</p>
+  }
+
+  if (!user) {
+    return (
+      <section className="chamadoBox" id="abrir-chamado">
+        <div className="sectionHeader">
+          <span>Novo chamado</span>
+          <h2>Entre para abrir um chamado</h2>
+          <p>Para registrar uma solicitação, primeiro entre com sua conta Google.</p>
+        </div>
+
+        <LoginButton />
+      </section>
+    )
+  }
+
   return (
     <section className="chamadoBox" id="abrir-chamado">
       <div className="sectionHeader">
         <span>Novo chamado</span>
         <h2>Abrir atendimento</h2>
         <p>Preencha os dados abaixo para registrar sua solicitação.</p>
+        <small>Logado como: {user.email}</small>
       </div>
 
       <form className="chamadoForm" onSubmit={handleSubmit}>

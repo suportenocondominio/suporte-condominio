@@ -141,9 +141,16 @@ return () => subscription.unsubscribe()
           <p>Solicite suporte técnico, atendimento residencial e fale com nossa equipe rapidamente.</p>
         </section>
 
-        <button className="appOpenTicketButton" onClick={() => setShowChamado(true)}>
-          Abrir chamado
-        </button>
+        {user ? (
+  <button
+    className="appOpenTicketButton"
+    onClick={() => setShowChamado(true)}
+  >
+    Abrir chamado
+  </button>
+) : (
+  <LoginButton />
+)}
 
         <section className="appGrid">
           <a href={whatsapp} target="_blank" rel="noreferrer" className="appCard appPrimary">
@@ -415,10 +422,20 @@ return () => subscription.unsubscribe()
           <h2>Solicite um atendimento agora mesmo</h2>
           <p>Fale com nossa equipe pelo WhatsApp e receba um atendimento rápido.</p>
         </div>
-        <button className="button buttonLarge fadeUp delayOne" onClick={() => setShowChamado(true)}>
-          <MessageCircle size={22} />
-          Abrir chamado
-        </button>
+   {user ? (
+  <button
+    className="button buttonLarge fadeUp delayOne"
+    onClick={() => setShowChamado(true)}
+  >
+    <MessageCircle size={22} />
+    Abrir chamado
+  </button>
+) : (
+  <div className="fadeUp delayOne">
+    <LoginButton />
+  </div>
+)}
+
       </section>
 
       <footer className="footer">
