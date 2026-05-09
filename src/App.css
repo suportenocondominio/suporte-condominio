@@ -2192,3 +2192,471 @@ a {
   align-items: center;
   justify-content: center;
 }
+
+.meusChamadosBox {
+  margin-top: 34px;
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 14px 36px rgba(7, 27, 58, 0.08);
+}
+
+.meusChamadosHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.meusChamadosHeader h3 {
+  color: #071b3a;
+  font-size: 24px;
+}
+
+.meusChamadosHeader button,
+.meuChamadoCard button,
+.clienteRespostaBox button {
+  border: 0;
+  background: #071b3a;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.meusChamadosLista {
+  display: grid;
+  gap: 14px;
+}
+
+.meuChamadoCard {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.meuChamadoCard strong {
+  color: #1d4ed8;
+}
+
+.meuChamadoCard h4 {
+  margin: 4px 0;
+  color: #071b3a;
+}
+
+.meuChamadoCard p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.clienteStatus {
+  border-radius: 999px;
+  padding: 9px 13px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.clienteStatus.aberto {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.clienteStatus.em-andamento {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.clienteStatus.aguardando-morador {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.clienteStatus.resolvido {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.clienteStatus.cancelado {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.clienteModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 27, 58, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 20px;
+}
+
+.clienteModal {
+  background: white;
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 26px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+}
+
+.clienteCloseModal {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: 0;
+  background: transparent;
+  font-size: 34px;
+  color: #071b3a;
+  cursor: pointer;
+}
+
+.clienteModalHeader span {
+  color: #1d4ed8;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.clienteModalHeader h3 {
+  color: #071b3a;
+  font-size: 28px;
+  margin: 8px 0;
+}
+
+.clienteModalHeader p {
+  color: #64748b;
+}
+
+.clienteDescricaoBox {
+  margin-top: 22px;
+  background: #f4f7fb;
+  border-radius: 18px;
+  padding: 18px;
+  color: #071b3a;
+}
+
+.clienteDescricaoBox p {
+  margin-top: 8px;
+  color: #44556c;
+  line-height: 1.6;
+}
+
+.clienteMensagensBox {
+  margin-top: 26px;
+}
+
+.clienteMensagensBox h4 {
+  color: #071b3a;
+  font-size: 22px;
+  margin-bottom: 14px;
+}
+
+.semMensagensCliente {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 16px;
+  color: #64748b;
+}
+
+.clienteMensagensLista {
+  display: grid;
+  gap: 14px;
+}
+
+.clienteMensagemItem {
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  background: white;
+}
+
+.clienteMensagemAdmin {
+  border-left: 5px solid #071b3a;
+  background: #f8fafc;
+}
+
+.clienteMensagemCliente {
+  border-left: 5px solid #1d4ed8;
+}
+
+.clienteMensagemMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.clienteMensagemMeta strong {
+  color: #071b3a;
+}
+
+.clienteMensagemMeta span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.clienteMensagemItem p {
+  color: #334155;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.clienteAnexoBox {
+  margin-top: 12px;
+}
+
+.clienteAnexoBox img {
+  max-width: 100%;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.clienteAnexoBox a {
+  color: #1d4ed8;
+  font-weight: 800;
+}
+
+.clienteRespostaBox {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.clienteRespostaBox textarea {
+  width: 100%;
+  min-height: 110px;
+  resize: vertical;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 15px;
+  color: #071b3a;
+  outline: none;
+}
+
+.clienteRespostaBox input[type="file"] {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px dashed #cbd5e1;
+}
+
+.clienteRespostaBox small {
+  color: #64748b;
+}
+
+.clienteRespostaBox button {
+  justify-self: end;
+}
+
+.clienteRespostaBox button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .meuChamadoCard {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .clienteModal {
+    padding: 24px;
+  }
+
+  .meusChamadosHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.appCardButton {
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.bottomNav button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+/* AJUSTE TOPO PREMIUM */
+.premiumTopbar {
+  max-width: 1180px;
+  margin: 20px auto 0;
+  padding: 18px 28px;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 14px 40px rgba(7, 27, 58, 0.1);
+  overflow: visible;
+}
+
+.premiumBrand img {
+  height: 120px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 18px;
+}
+
+.premiumMenu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+}
+
+.premiumMenu a {
+  color: #071b3a;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 12px 10px;
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+.premiumWhatsapp {
+  flex-shrink: 0;
+  max-width: 190px;
+  background: linear-gradient(135deg, #22d18b, #2ff0a4);
+  color: #071b3a;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 12px 28px rgba(34, 209, 139, 0.3);
+}
+
+/* BOTÕES DO HERO */
+.premiumHeroButtons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.premiumPrimaryButton,
+.premiumSecondaryButton {
+  border: 0;
+  min-height: 54px;
+  padding: 16px 22px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.2s ease;
+}
+
+.premiumPrimaryButton {
+  background: linear-gradient(135deg, #22d18b, #2ff0a4);
+  color: #071b3a;
+  box-shadow: 0 12px 30px rgba(34, 209, 139, 0.32);
+}
+
+.premiumSecondaryButton {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: none;
+}
+
+.premiumPrimaryButton:hover,
+.premiumSecondaryButton:hover {
+  transform: translateY(-3px);
+}
+
+.premiumSecondaryButton:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* CTA */
+.ctaButtons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.cta .premiumSecondaryButton {
+  background: white;
+  color: #071b3a;
+}
+
+/* MOBILE */
+@media (max-width: 980px) {
+  .premiumTopbar {
+    flex-wrap: wrap;
+  }
+
+  .premiumBrand img {
+    height: 88px;
+  }
+
+  .premiumMenu {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+
+  .premiumWhatsapp {
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .premiumTopbar {
+    margin: 14px;
+    padding: 14px;
+  }
+
+  .premiumBrand img {
+    height: 72px;
+  }
+
+  .premiumHeroButtons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .premiumPrimaryButton,
+  .premiumSecondaryButton {
+    width: 100%;
+  }
+}

@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import logo from './assets/logo.png'
-import hero from './assets/hero.png'
 import ChamadoForm from './components/ChamadoForm'
-import heroPremium from './assets/hero-premium.png'
-import logoPremium from './assets/logo-premium.png'
 import heroImage from './assets/hero-condominio.png'
 import LoginButton from './components/LoginButton'
 import { supabase } from './lib/supabase'
@@ -29,40 +26,51 @@ import {
   Wrench,
   Home,
   Quote,
-  Menu,
-  X
 } from 'lucide-react'
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
   const [isAppMode, setIsAppMode] = useState(false)
   const [showChamado, setShowChamado] = useState(false)
+  const [chamadoMode, setChamadoMode] = useState('abrir')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const appParam = params.get('app') === 'true'
+
     const standalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       window.navigator.standalone === true
+
     setIsAppMode(appParam || standalone)
+
     supabase.auth.getUser().then(({ data }) => {
-  setUser(data.user)
-})
+      setUser(data.user)
+    })
 
-const {
-  data: { subscription },
-} = supabase.auth.onAuthStateChange((_event, session) => {
-  setUser(session?.user ?? null)
-})
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
 
-return () => subscription.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [])
 
   const whatsappBase = 'https://wa.me/5511952491217'
   const whatsapp = `${whatsappBase}?text=${encodeURIComponent(
     'Olá! Vim pelo site/app Suporte no Condomínio e gostaria de solicitar um atendimento.'
   )}`
+
+  const abrirChamado = () => {
+    setChamadoMode('abrir')
+    setShowChamado(true)
+  }
+
+  const acompanharChamados = () => {
+    setChamadoMode('acompanhar')
+    setShowChamado(true)
+  }
 
   const services = [
     {
@@ -110,20 +118,41 @@ return () => subscription.unsubscribe()
   ]
 
   const testimonials = [
-    { name: 'Marcos Oliveira — Parque Renato Maia', text: 'Atendimento rápido, organizado e com explicação simples. Resolveram o problema sem enrolação.' },
-    { name: 'Renata Almeida — Vila Galvão', text: 'Meu Wi-Fi vivia caindo. Depois da visita, o sinal melhorou muito no apartamento todo.' },
-    { name: 'Felipe Guimarães — Centro de Guarulhos', text: 'Gostei porque o atendimento foi claro, pontual e passou confiança desde o primeiro contato.' },
+    {
+      name: 'Marcos Oliveira — Parque Renato Maia',
+      text: 'Atendimento rápido, organizado e com explicação simples. Resolveram o problema sem enrolação.',
+    },
+    {
+      name: 'Renata Almeida — Vila Galvão',
+      text: 'Meu Wi-Fi vivia caindo. Depois da visita, o sinal melhorou muito no apartamento todo.',
+    },
+    {
+      name: 'Felipe Guimarães — Centro de Guarulhos',
+      text: 'Gostei porque o atendimento foi claro, pontual e passou confiança desde o primeiro contato.',
+    },
   ]
 
   const faqs = [
-    { question: 'Vocês atendem dentro de condomínios?', answer: 'Sim. O atendimento é pensado para moradores de condomínios, apartamentos e residências.' },
-    { question: 'Atendem quais regiões?', answer: 'Atendemos Guarulhos e região, conforme disponibilidade de agenda.' },
-    { question: 'O orçamento é feito pelo WhatsApp?', answer: 'Sim. Primeiro entendemos o problema e, quando necessário, alinhamos a visita técnica.' },
-    { question: 'Vocês configuram câmeras e acesso pelo celular?', answer: 'Sim. Fazemos instalação, configuração e orientação de uso no aplicativo.' },
+    {
+      question: 'Vocês atendem dentro de condomínios?',
+      answer: 'Sim. O atendimento é pensado para moradores de condomínios, apartamentos e residências.',
+    },
+    {
+      question: 'Atendem quais regiões?',
+      answer: 'Atendemos Guarulhos e região, conforme disponibilidade de agenda.',
+    },
+    {
+      question: 'O orçamento é feito pelo WhatsApp?',
+      answer: 'Sim. Primeiro entendemos o problema e, quando necessário, alinhamos a visita técnica.',
+    },
+    {
+      question: 'Vocês configuram câmeras e acesso pelo celular?',
+      answer: 'Sim. Fazemos instalação, configuração e orientação de uso no aplicativo.',
+    },
   ]
 
-  const serviceWhatsapp = (message) => `${whatsappBase}?text=${encodeURIComponent(message)}`
-  const closeMenu = () => setMenuOpen(false)
+  const serviceWhatsapp = (message) =>
+    `${whatsappBase}?text=${encodeURIComponent(message)}`
 
   if (isAppMode) {
     return (
@@ -142,17 +171,23 @@ return () => subscription.unsubscribe()
         </section>
 
         {user ? (
-  <button
-    className="appOpenTicketButton"
-    onClick={() => setShowChamado(true)}
-  >
-    Abrir chamado
-  </button>
-) : (
-  <div className="appLoginButtonWrapper">
-    <LoginButton />
-  </div>
-)}
+          <>
+            <button className="appOpenTicketButton" onClick={abrirChamado}>
+              Abrir chamado
+            </button>
+
+            <button
+              className="appOpenTicketButton appTrackTicketButton"
+              onClick={acompanharChamados}
+            >
+              Acompanhar chamados
+            </button>
+          </>
+        ) : (
+          <div className="appLoginButtonWrapper">
+            <LoginButton />
+          </div>
+        )}
 
         <section className="appGrid">
           <a href={whatsapp} target="_blank" rel="noreferrer" className="appCard appPrimary">
@@ -160,16 +195,19 @@ return () => subscription.unsubscribe()
             <strong>WhatsApp</strong>
             <span>Atendimento imediato</span>
           </a>
+
+          <button className="appCard appCardButton" onClick={acompanharChamados}>
+            <CheckCircle2 size={30} />
+            <strong>Chamados</strong>
+            <span>Acompanhe seus tickets</span>
+          </button>
+
           <a href="#servicos" className="appCard">
             <Laptop size={30} />
             <strong>Serviços</strong>
             <span>Veja os atendimentos</span>
           </a>
-          <a href="#como-funciona" className="appCard">
-            <Wrench size={30} />
-            <strong>Como funciona</strong>
-            <span>Entenda o processo</span>
-          </a>
+
           <a href="tel:11952491217" className="appCard">
             <Phone size={30} />
             <strong>Ligar</strong>
@@ -182,9 +220,16 @@ return () => subscription.unsubscribe()
             <span>Serviços</span>
             <h2>Atendimento residencial</h2>
           </div>
+
           <div className="servicesGrid">
             {services.map((service) => (
-              <a className="serviceCard" key={service.title} href={serviceWhatsapp(service.message)} target="_blank" rel="noreferrer">
+              <a
+                className="serviceCard"
+                key={service.title}
+                href={serviceWhatsapp(service.message)}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <div className="serviceIcon">{service.icon}</div>
                 <h3>{service.title}</h3>
                 <p>{service.desc}</p>
@@ -199,6 +244,7 @@ return () => subscription.unsubscribe()
             <h2>Atendimento simples e rápido</h2>
             <p>Você chama no WhatsApp, explica o problema e nossa equipe agenda o melhor horário para atendimento.</p>
           </div>
+
           <div className="steps">
             {steps.map((step, index) => (
               <div className="step" key={step.title}>
@@ -211,16 +257,30 @@ return () => subscription.unsubscribe()
         </section>
 
         <nav className="bottomNav">
-          <a href="#"><Home size={22} /><span>Início</span></a>
-          <a href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle size={22} /><span>WhatsApp</span></a>
-          <a href="#servicos"><Wrench size={22} /><span>Serviços</span></a>
+          <a href="#">
+            <Home size={22} />
+            <span>Início</span>
+          </a>
+
+          <button type="button" onClick={acompanharChamados}>
+            <CheckCircle2 size={22} />
+            <span>Chamados</span>
+          </button>
+
+          <a href={whatsapp} target="_blank" rel="noreferrer">
+            <MessageCircle size={22} />
+            <span>WhatsApp</span>
+          </a>
         </nav>
 
         {showChamado && (
           <div className="modalOverlay">
             <div className="modalContent appModalContent">
-              <button className="closeModal" onClick={() => setShowChamado(false)}>×</button>
-              <ChamadoForm />
+              <button className="closeModal" onClick={() => setShowChamado(false)}>
+                ×
+              </button>
+
+              <ChamadoForm initialView={chamadoMode} />
             </div>
           </div>
         )}
@@ -231,17 +291,19 @@ return () => subscription.unsubscribe()
   return (
     <main>
       <section className="premiumHero">
-
         <header className="premiumTopbar">
           <div className="premiumBrand">
             <img src={logo} alt="Logo" />
           </div>
+
           <nav className="premiumMenu">
             <a href="#">Início</a>
             <a href="#servicos">Serviços</a>
             <a href="#sobre">Sobre</a>
             <a href="#contato">Contato</a>
+            <a href="/admin">Área do analista</a>
           </nav>
+
           <a href={whatsapp} target="_blank" rel="noreferrer" className="premiumWhatsapp">
             <MessageCircle size={20} />
             Solicitar atendimento
@@ -255,32 +317,31 @@ return () => subscription.unsubscribe()
               residencial sem
               <span> complicação.</span>
             </h1>
+
             <p>
-              Suporte técnico para informática, Wi-Fi, câmeras,
-              elétrica e segurança digital, com atendimento próximo,
-              confiável e fácil de acionar. </p>
-              <p>
-              Abra seu chamado para maior agilidade 👇🏻
+              Suporte técnico para informática, Wi-Fi, câmeras, elétrica e segurança digital,
+              com atendimento próximo, confiável e fácil de acionar.
             </p>
-<div className="premiumHeroButtons">
 
-  {user ? (
+            <p>Abra seu chamado para maior agilidade 👇🏻</p>
 
-    <button
-      className="premiumPrimaryButton"
-      onClick={() => setShowChamado(true)}
-    >
-      <MessageCircle size={22} />
-      Abrir chamado
-    </button>
+            <div className="premiumHeroButtons">
+              {user ? (
+                <>
+                  <button className="premiumPrimaryButton" onClick={abrirChamado}>
+                    <MessageCircle size={22} />
+                    Abrir chamado
+                  </button>
 
-  ) : (
-
-    <LoginButton />
-
-  )}
-
-</div>
+                  <button className="premiumSecondaryButton" onClick={acompanharChamados}>
+                    <CheckCircle2 size={22} />
+                    Acompanhar chamados
+                  </button>
+                </>
+              ) : (
+                <LoginButton />
+              )}
+            </div>
           </div>
 
           <div className="premiumHeroImage">
@@ -294,24 +355,39 @@ return () => subscription.unsubscribe()
             <strong>Atendimento rápido</strong>
             <span>Resposta ágil via WhatsApp</span>
           </div>
+
           <div>
             <ShieldCheck size={22} />
             <strong>Serviços completos</strong>
             <span>Soluções para o seu dia a dia</span>
           </div>
+
           <div>
             <CheckCircle2 size={22} />
             <strong>Profissional confiável</strong>
             <span>Qualidade e transparência</span>
           </div>
         </div>
-
       </section>
 
       <section className="featureStrip fadeUp delayTwo">
-        <div><Sparkles size={22} /><strong>Atendimento humanizado</strong><span>Sem termos técnicos complicados.</span></div>
-        <div><Wrench size={22} /><strong>Serviços práticos</strong><span>Do computador ao Wi-Fi da casa.</span></div>
-        <div><MapPin size={22} /><strong>Guarulhos e região</strong><span>Agenda pensada para atendimento local.</span></div>
+        <div>
+          <Sparkles size={22} />
+          <strong>Atendimento humanizado</strong>
+          <span>Sem termos técnicos complicados.</span>
+        </div>
+
+        <div>
+          <Wrench size={22} />
+          <strong>Serviços práticos</strong>
+          <span>Do computador ao Wi-Fi da casa.</span>
+        </div>
+
+        <div>
+          <MapPin size={22} />
+          <strong>Guarulhos e região</strong>
+          <span>Agenda pensada para atendimento local.</span>
+        </div>
       </section>
 
       <section className="services" id="servicos">
@@ -320,12 +396,21 @@ return () => subscription.unsubscribe()
           <h2>Soluções técnicas especializadas</h2>
           <p>Atendimento residencial com foco em praticidade, rapidez e confiança.</p>
         </div>
+
         <div className="servicesGrid">
           {services.map((service, index) => (
-            <a className="serviceCard fadeUp" style={{ animationDelay: `${index * 0.08}s` }} key={service.title} href={serviceWhatsapp(service.message)} target="_blank" rel="noreferrer">
+            <a
+              className="serviceCard fadeUp"
+              style={{ animationDelay: `${index * 0.08}s` }}
+              key={service.title}
+              href={serviceWhatsapp(service.message)}
+              target="_blank"
+              rel="noreferrer"
+            >
               <div className="serviceIcon">{service.icon}</div>
               <h3>{service.title}</h3>
               <p>{service.desc}</p>
+
               <div className="serviceFooter">
                 <span>Solicitar serviço</span>
                 <ChevronRight size={18} />
@@ -341,9 +426,14 @@ return () => subscription.unsubscribe()
           <h2>Atendimento simples, rápido e sem burocracia</h2>
           <p>Você chama no WhatsApp, explica o problema e nossa equipe agenda o melhor horário para atendimento técnico.</p>
         </div>
+
         <div className="steps">
           {steps.map((step, index) => (
-            <div className="step fadeUp" style={{ animationDelay: `${index * 0.1}s` }} key={step.title}>
+            <div
+              className="step fadeUp"
+              style={{ animationDelay: `${index * 0.1}s` }}
+              key={step.title}
+            >
               <div className="stepNumber">0{index + 1}</div>
               <strong>{step.title}</strong>
               <p>{step.desc}</p>
@@ -352,18 +442,40 @@ return () => subscription.unsubscribe()
         </div>
       </section>
 
-      <section className="trust">
+      <section className="trust" id="sobre">
         <div className="trustImage fadeUp">
-          <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop" alt="Equipe técnica" />
+          <img
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop"
+            alt="Equipe técnica"
+          />
         </div>
+
         <div className="trustContent fadeUp delayOne">
           <span>Por que escolher a gente?</span>
           <h2>Equipe qualificada e atendimento confiável</h2>
-          <p>Trabalhamos com foco em qualidade, transparência e experiência do cliente. O objetivo é resolver o problema e explicar tudo de forma simples.</p>
+          <p>
+            Trabalhamos com foco em qualidade, transparência e experiência do cliente.
+            O objetivo é resolver o problema e explicar tudo de forma simples.
+          </p>
+
           <div className="trustItems">
-            <div><Star size={22} /><strong>Experiência</strong><small>Atendimento técnico prático.</small></div>
-            <div><ShieldCheck size={22} /><strong>Segurança</strong><small>Cuidado com dados e equipamentos.</small></div>
-            <div><Clock3 size={22} /><strong>Rapidez</strong><small>Contato direto pelo WhatsApp.</small></div>
+            <div>
+              <Star size={22} />
+              <strong>Experiência</strong>
+              <small>Atendimento técnico prático.</small>
+            </div>
+
+            <div>
+              <ShieldCheck size={22} />
+              <strong>Segurança</strong>
+              <small>Cuidado com dados e equipamentos.</small>
+            </div>
+
+            <div>
+              <Clock3 size={22} />
+              <strong>Rapidez</strong>
+              <small>Contato direto pelo WhatsApp.</small>
+            </div>
           </div>
         </div>
       </section>
@@ -374,9 +486,14 @@ return () => subscription.unsubscribe()
           <h2>Quem já utilizou recomenda</h2>
           <p>Depoimentos que reforçam confiança, proximidade e qualidade no atendimento.</p>
         </div>
+
         <div className="testimonialGrid">
           {testimonials.map((item, index) => (
-            <div className="testimonialCard fadeUp" style={{ animationDelay: `${index * 0.1}s` }} key={item.name}>
+            <div
+              className="testimonialCard fadeUp"
+              style={{ animationDelay: `${index * 0.1}s` }}
+              key={item.name}
+            >
               <Quote size={28} />
               <p>{item.text}</p>
               <strong>{item.name}</strong>
@@ -391,13 +508,26 @@ return () => subscription.unsubscribe()
           <h2>Baixe o app Suporte no Condomínio</h2>
           <p>Solicite atendimento, acompanhe chamados e fale com nossa equipe direto pelo aplicativo.</p>
         </div>
+
         <div className="storeButtons fadeUp delayOne">
           <a href="#" className="storeButton" aria-label="Baixar na App Store">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" className="storeRealIcon appleIcon" />
-            <div><small>Baixar na</small><strong>App Store</strong></div>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+              alt="Apple"
+              className="storeRealIcon appleIcon"
+            />
+            <div>
+              <small>Baixar na</small>
+              <strong>App Store</strong>
+            </div>
           </a>
+
           <a href="#" className="storeButton googleButton" aria-label="Baixar no Google Play">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="googlePlayBadge" />
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+              alt="Google Play"
+              className="googlePlayBadge"
+            />
           </a>
         </div>
       </section>
@@ -408,10 +538,18 @@ return () => subscription.unsubscribe()
           <h2>Antes de chamar o suporte</h2>
           <p>Algumas respostas rápidas para facilitar seu primeiro contato.</p>
         </div>
+
         <div className="faqGrid">
           {faqs.map((faq, index) => (
-            <details className="faqItem fadeUp" style={{ animationDelay: `${index * 0.08}s` }} key={faq.question}>
-              <summary><HelpCircle size={20} />{faq.question}</summary>
+            <details
+              className="faqItem fadeUp"
+              style={{ animationDelay: `${index * 0.08}s` }}
+              key={faq.question}
+            >
+              <summary>
+                <HelpCircle size={20} />
+                {faq.question}
+              </summary>
               <p>{faq.answer}</p>
             </details>
           ))}
@@ -424,20 +562,24 @@ return () => subscription.unsubscribe()
           <h2>Solicite um atendimento agora mesmo</h2>
           <p>Fale com nossa equipe pelo WhatsApp e receba um atendimento rápido.</p>
         </div>
-   {user ? (
-  <button
-    className="button buttonLarge fadeUp delayOne"
-    onClick={() => setShowChamado(true)}
-  >
-    <MessageCircle size={22} />
-    Abrir chamado
-  </button>
-) : (
-  <div className="fadeUp delayOne">
-    <LoginButton />
-  </div>
-)}
 
+        {user ? (
+          <div className="ctaButtons fadeUp delayOne">
+            <button className="button buttonLarge" onClick={abrirChamado}>
+              <MessageCircle size={22} />
+              Abrir chamado
+            </button>
+
+            <button className="premiumSecondaryButton" onClick={acompanharChamados}>
+              <CheckCircle2 size={22} />
+              Acompanhar chamados
+            </button>
+          </div>
+        ) : (
+          <div className="fadeUp delayOne">
+            <LoginButton />
+          </div>
+        )}
       </section>
 
       <footer className="footer">
@@ -445,15 +587,24 @@ return () => subscription.unsubscribe()
         <p>© 2025 Suporte no Condomínio · Atendimento residencial em Guarulhos e região.</p>
       </footer>
 
-      <a className="whatsappFloat" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Chamar no WhatsApp">
+      <a
+        className="whatsappFloat"
+        href={whatsapp}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Chamar no WhatsApp"
+      >
         <MessageCircle size={30} />
       </a>
 
       {showChamado && (
         <div className="modalOverlay">
           <div className="modalContent">
-            <button className="closeModal" onClick={() => setShowChamado(false)}>×</button>
-            <ChamadoForm />
+            <button className="closeModal" onClick={() => setShowChamado(false)}>
+              ×
+            </button>
+
+            <ChamadoForm initialView={chamadoMode} />
           </div>
         </div>
       )}
