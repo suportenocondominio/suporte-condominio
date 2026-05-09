@@ -2170,3 +2170,25 @@ a {
 .googleLoginButton:hover {
   transform: translateY(-2px);
 }
+
+.appLoginButtonWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 8px;
+}
+
+.appLoginButtonWrapper button,
+.appLoginButtonWrapper a {
+  width: auto;
+  min-width: 220px;
+  max-width: 280px;
+  height: 64px;
+  padding: 0 28px;
+  border-radius: 28px;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

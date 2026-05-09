@@ -149,7 +149,9 @@ return () => subscription.unsubscribe()
     Abrir chamado
   </button>
 ) : (
-  <LoginButton />
+  <div className="appLoginButtonWrapper">
+    <LoginButton />
+  </div>
 )}
 
         <section className="appGrid">
