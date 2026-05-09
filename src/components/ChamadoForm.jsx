@@ -234,7 +234,7 @@ function ChamadoForm({ initialView = 'abrir', perfilCliente = null }) {
   const mensagem = {
     chamado_id: selectedChamado.id,
     user_id: user.id,
-    mensagem: temMensagem ? novaMensagem.trim() : null,
+    mensagem: temMensagem ? novaMensagem.trim() : '',
     autor_nome: perfilCliente?.nome || user.user_metadata?.full_name || user.email,
     autor_email: user.email,
     autor_tipo: 'cliente',
