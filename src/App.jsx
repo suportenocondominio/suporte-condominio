@@ -26,6 +26,7 @@ import {
   Wrench,
   Home,
   Quote,
+  User,
 } from 'lucide-react'
 
 function App() {
@@ -33,6 +34,19 @@ function App() {
   const [showChamado, setShowChamado] = useState(false)
   const [chamadoMode, setChamadoMode] = useState('abrir')
   const [user, setUser] = useState(null)
+
+  const [perfilCliente, setPerfilCliente] = useState(null)
+  const [showPerfilModal, setShowPerfilModal] = useState(false)
+  const [salvandoPerfil, setSalvandoPerfil] = useState(false)
+
+  const [perfilForm, setPerfilForm] = useState({
+    nome: '',
+    telefone: '',
+    condominio: '',
+    bloco: '',
+    apartamento: '',
+    endereco: '',
+  })
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -45,32 +59,132 @@ function App() {
     setIsAppMode(appParam || standalone)
 
     supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user)
+      setUser(data.user ?? null)
+
+      if (data.user) {
+        carregarPerfil(data.user.id)
+      } else {
+        setPerfilCliente(null)
+        setShowChamado(false)
+        setShowPerfilModal(false)
+      }
     })
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+      const usuarioAtual = session?.user ?? null
+      setUser(usuarioAtual)
+
+      if (usuarioAtual) {
+        carregarPerfil(usuarioAtual.id)
+      } else {
+        setPerfilCliente(null)
+        setShowChamado(false)
+        setShowPerfilModal(false)
+      }
     })
 
     return () => subscription.unsubscribe()
   }, [])
 
-  const whatsappBase = 'https://wa.me/5511952491217'
-  const whatsapp = `${whatsappBase}?text=${encodeURIComponent(
-    'Olá! Vim pelo site/app Suporte no Condomínio e gostaria de solicitar um atendimento.'
-  )}`
+  const carregarPerfil = async (userId) => {
+    const { data, error } = await supabase
+      .from('perfis_clientes')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle()
+
+    if (error) {
+      console.error('Erro ao carregar perfil:', error)
+      return
+    }
+
+    if (data) {
+      setPerfilCliente(data)
+      setPerfilForm({
+        nome: data.nome || '',
+        telefone: data.telefone || '',
+        condominio: data.condominio || '',
+        bloco: data.bloco || '',
+        apartamento: data.apartamento || '',
+        endereco: data.endereco || '',
+      })
+    } else {
+      setPerfilCliente(null)
+    }
+  }
+
+  const perfilEstaCompleto = () => {
+    return (
+      perfilCliente?.nome &&
+      perfilCliente?.telefone &&
+      perfilCliente?.condominio &&
+      perfilCliente?.apartamento
+    )
+  }
 
   const abrirChamado = () => {
+    if (!user) return
+
+    if (!perfilEstaCompleto()) {
+      setShowPerfilModal(true)
+      return
+    }
+
     setChamadoMode('abrir')
     setShowChamado(true)
   }
 
   const acompanharChamados = () => {
+    if (!user) return
+
     setChamadoMode('acompanhar')
     setShowChamado(true)
   }
+
+  const salvarPerfilCliente = async (e) => {
+    e.preventDefault()
+
+    if (!user) return
+
+    setSalvandoPerfil(true)
+
+    const payload = {
+      id: user.id,
+      nome: perfilForm.nome,
+      telefone: perfilForm.telefone,
+      condominio: perfilForm.condominio,
+      bloco: perfilForm.bloco,
+      apartamento: perfilForm.apartamento,
+      endereco: perfilForm.endereco,
+      updated_at: new Date().toISOString(),
+    }
+
+    const { data, error } = await supabase
+      .from('perfis_clientes')
+      .upsert(payload)
+      .select()
+      .single()
+
+    setSalvandoPerfil(false)
+
+    if (error) {
+      alert('Erro ao salvar cadastro. Tente novamente.')
+      console.error(error)
+      return
+    }
+
+    setPerfilCliente(data)
+    setShowPerfilModal(false)
+    setChamadoMode('abrir')
+    setShowChamado(true)
+  }
+
+  const whatsappBase = 'https://wa.me/5511952491217'
+  const whatsapp = `${whatsappBase}?text=${encodeURIComponent(
+    'Olá! Vim pelo site/app Suporte no Condomínio e gostaria de solicitar um atendimento.'
+  )}`
 
   const services = [
     {
@@ -153,6 +267,102 @@ function App() {
 
   const serviceWhatsapp = (message) =>
     `${whatsappBase}?text=${encodeURIComponent(message)}`
+
+  const perfilModal = showPerfilModal && (
+    <div className="modalOverlay">
+      <div className="modalContent perfilModalContent">
+        <button className="closeModal" onClick={() => setShowPerfilModal(false)}>
+          ×
+        </button>
+
+        <h2>Complete seu cadastro</h2>
+        <p className="perfilModalText">
+          Preencha seus dados uma única vez. Depois eles serão usados automaticamente nos próximos chamados.
+        </p>
+
+        <form className="perfilForm" onSubmit={salvarPerfilCliente}>
+          <label>
+            Nome completo
+            <input
+              type="text"
+              value={perfilForm.nome}
+              onChange={(e) => setPerfilForm({ ...perfilForm, nome: e.target.value })}
+              required
+            />
+          </label>
+
+          <label>
+            Telefone / WhatsApp
+            <input
+              type="tel"
+              value={perfilForm.telefone}
+              onChange={(e) => setPerfilForm({ ...perfilForm, telefone: e.target.value })}
+              required
+            />
+          </label>
+
+          <label>
+            Condomínio
+            <input
+              type="text"
+              value={perfilForm.condominio}
+              onChange={(e) => setPerfilForm({ ...perfilForm, condominio: e.target.value })}
+              required
+            />
+          </label>
+
+          <div className="perfilFormRow">
+            <label>
+              Bloco
+              <input
+                type="text"
+                value={perfilForm.bloco}
+                onChange={(e) => setPerfilForm({ ...perfilForm, bloco: e.target.value })}
+              />
+            </label>
+
+            <label>
+              Apartamento
+              <input
+                type="text"
+                value={perfilForm.apartamento}
+                onChange={(e) => setPerfilForm({ ...perfilForm, apartamento: e.target.value })}
+                required
+              />
+            </label>
+          </div>
+
+          <label>
+            Endereço
+            <input
+              type="text"
+              value={perfilForm.endereco}
+              onChange={(e) => setPerfilForm({ ...perfilForm, endereco: e.target.value })}
+            />
+          </label>
+
+          <button type="submit" className="premiumPrimaryButton" disabled={salvandoPerfil}>
+            {salvandoPerfil ? 'Salvando...' : 'Salvar cadastro e abrir chamado'}
+          </button>
+
+<button
+  type="button"
+  className="perfilLogoutButton"
+  onClick={async () => {
+    await supabase.auth.signOut()
+    setUser(null)
+    setPerfilCliente(null)
+    setShowPerfilModal(false)
+    setShowChamado(false)
+  }}
+>
+  Sair da conta
+</button>
+
+        </form>
+      </div>
+    </div>
+  )
 
   if (isAppMode) {
     return (
@@ -280,10 +490,12 @@ function App() {
                 ×
               </button>
 
-              <ChamadoForm initialView={chamadoMode} />
+              <ChamadoForm initialView={chamadoMode} perfilCliente={perfilCliente} />
             </div>
           </div>
         )}
+
+        {perfilModal}
       </main>
     )
   }
@@ -304,10 +516,14 @@ function App() {
             <a href="/admin">Área do analista</a>
           </nav>
 
-          <a href={whatsapp} target="_blank" rel="noreferrer" className="premiumWhatsapp">
-            <MessageCircle size={20} />
-            Solicitar atendimento
-          </a>
+        {user ? (
+  <button className="premiumWhatsapp" onClick={() => setShowPerfilModal(true)}>
+    <User size={20} />
+    Área do cliente
+  </button>
+) : (
+  <LoginButton />
+)}
         </header>
 
         <div className="premiumHeroContent">
@@ -323,24 +539,22 @@ function App() {
               com atendimento próximo, confiável e fácil de acionar.
             </p>
 
-            <p>Abra seu chamado para maior agilidade 👇🏻</p>
+            <p>Abra seu chamado para maior agilidade.</p>
 
             <div className="premiumHeroButtons">
-              {user ? (
-                <>
-                  <button className="premiumPrimaryButton" onClick={abrirChamado}>
-                    <MessageCircle size={22} />
-                    Abrir chamado
-                  </button>
+              {user && (
+  <div className="premiumHeroButtons">
+    <button className="premiumPrimaryButton" onClick={abrirChamado}>
+      <MessageCircle size={22} />
+      Abrir chamado
+    </button>
 
-                  <button className="premiumSecondaryButton" onClick={acompanharChamados}>
-                    <CheckCircle2 size={22} />
-                    Acompanhar chamados
-                  </button>
-                </>
-              ) : (
-                <LoginButton />
-              )}
+    <button className="premiumSecondaryButton" onClick={acompanharChamados}>
+      <CheckCircle2 size={22} />
+      Acompanhar chamados
+    </button>
+  </div>
+)}
             </div>
           </div>
 
@@ -604,10 +818,12 @@ function App() {
               ×
             </button>
 
-            <ChamadoForm initialView={chamadoMode} />
+            <ChamadoForm initialView={chamadoMode} perfilCliente={perfilCliente} />
           </div>
         </div>
       )}
+
+      {perfilModal}
     </main>
   )
 }

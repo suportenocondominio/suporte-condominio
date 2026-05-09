@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import LoginButton from './LoginButton'
 
-function ChamadoForm({ initialView = 'abrir' }) {
+function ChamadoForm({ initialView = 'abrir', perfilCliente = null }) {
   const [activeView, setActiveView] = useState(initialView)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -31,6 +31,20 @@ function ChamadoForm({ initialView = 'abrir' }) {
   useEffect(() => {
     setActiveView(initialView)
   }, [initialView])
+
+  useEffect(() => {
+    if (perfilCliente) {
+      setForm((prev) => ({
+        ...prev,
+        nome: perfilCliente.nome || '',
+        telefone: perfilCliente.telefone || '',
+        condominio: perfilCliente.condominio || '',
+        apartamento: `${perfilCliente.bloco ? `Bloco ${perfilCliente.bloco} - ` : ''}${
+          perfilCliente.apartamento || ''
+        }`,
+      }))
+    }
+  }, [perfilCliente])
 
   useEffect(() => {
     async function checkUser() {
@@ -127,7 +141,13 @@ function ChamadoForm({ initialView = 'abrir' }) {
     setSuccess(false)
 
     const chamado = {
-      ...form,
+      nome: form.nome,
+      telefone: form.telefone,
+      condominio: form.condominio,
+      apartamento: form.apartamento,
+      servico: form.servico,
+      urgencia: form.urgencia,
+      descricao: form.descricao,
       user_id: user.id,
       email: user.email,
       status: 'Aberto',
@@ -152,10 +172,12 @@ function ChamadoForm({ initialView = 'abrir' }) {
     setActiveView('acompanhar')
 
     setForm({
-      nome: '',
-      telefone: '',
-      condominio: '',
-      apartamento: '',
+      nome: perfilCliente?.nome || '',
+      telefone: perfilCliente?.telefone || '',
+      condominio: perfilCliente?.condominio || '',
+      apartamento: `${perfilCliente?.bloco ? `Bloco ${perfilCliente.bloco} - ` : ''}${
+        perfilCliente?.apartamento || ''
+      }`,
       servico: '',
       urgencia: 'Normal',
       descricao: '',
@@ -205,7 +227,7 @@ function ChamadoForm({ initialView = 'abrir' }) {
       chamado_id: selectedChamado.id,
       user_id: user.id,
       mensagem: novaMensagem.trim() || null,
-      autor_nome: user.user_metadata?.full_name || user.email,
+      autor_nome: perfilCliente?.nome || user.user_metadata?.full_name || user.email,
       autor_email: user.email,
       autor_tipo: 'cliente',
       anexo_url: anexo?.url || null,
@@ -291,10 +313,34 @@ function ChamadoForm({ initialView = 'abrir' }) {
 
       {activeView === 'abrir' && (
         <form className="chamadoForm" onSubmit={handleSubmit}>
-          <input name="nome" placeholder="Seu nome" value={form.nome} onChange={handleChange} required />
-          <input name="telefone" placeholder="WhatsApp / telefone" value={form.telefone} onChange={handleChange} />
-          <input name="condominio" placeholder="Condomínio" value={form.condominio} onChange={handleChange} />
-          <input name="apartamento" placeholder="Apartamento / bloco" value={form.apartamento} onChange={handleChange} />
+          <input
+            name="nome"
+            placeholder="Seu nome"
+            value={form.nome}
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            name="telefone"
+            placeholder="WhatsApp / telefone"
+            value={form.telefone}
+            onChange={handleChange}
+          />
+
+          <input
+            name="condominio"
+            placeholder="Condomínio"
+            value={form.condominio}
+            onChange={handleChange}
+          />
+
+          <input
+            name="apartamento"
+            placeholder="Apartamento / bloco"
+            value={form.apartamento}
+            onChange={handleChange}
+          />
 
           <select name="servico" value={form.servico} onChange={handleChange} required>
             <option value="">Tipo de serviço</option>
@@ -369,12 +415,16 @@ function ChamadoForm({ initialView = 'abrir' }) {
       {selectedChamado && (
         <div className="clienteModalOverlay">
           <div className="clienteModal">
-            <button className="clienteCloseModal" onClick={fecharDetalhes}>×</button>
+            <button className="clienteCloseModal" onClick={fecharDetalhes}>
+              ×
+            </button>
 
             <div className="clienteModalHeader">
               <span>Chamado #{selectedChamado.ticket_id || '-'}</span>
               <h3>{selectedChamado.servico}</h3>
-              <p>Status: <strong>{selectedChamado.status}</strong></p>
+              <p>
+                Status: <strong>{selectedChamado.status}</strong>
+              </p>
             </div>
 
             <div className="clienteDescricaoBox">
@@ -393,7 +443,9 @@ function ChamadoForm({ initialView = 'abrir' }) {
                     <div
                       key={msg.id}
                       className={`clienteMensagemItem ${
-                        msg.autor_tipo === 'admin' ? 'clienteMensagemAdmin' : 'clienteMensagemCliente'
+                        msg.autor_tipo === 'admin'
+                          ? 'clienteMensagemAdmin'
+                          : 'clienteMensagemCliente'
                       }`}
                     >
                       <div className="clienteMensagemMeta">
