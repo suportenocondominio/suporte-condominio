@@ -81,17 +81,7 @@ function AdminChamados() {
       return
     }
 
-    await supabase.functions.invoke('notificar-cliente-chamado', {
-  body: {
-    chamadoId: selectedChamado.id,
-    ticketId: selectedChamado.ticket_id,
-    clienteNome: selectedChamado.nome,
-    clienteEmail: selectedChamado.email,
-    mensagem: novaMensagem.trim() || 'O suporte enviou uma nova atualização no seu chamado.',
-  },
-})
-
-    setChamados(data || [])
+      setChamados(data || [])
     setLoading(false)
   }
 
