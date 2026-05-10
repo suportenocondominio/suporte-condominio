@@ -9,6 +9,7 @@ function AdminChamados() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [adminPerfil, setAdminPerfil] = useState(null)
   const [authChecked, setAuthChecked] = useState(false)
 
   const [selectedChamado, setSelectedChamado] = useState(null)
@@ -55,6 +56,7 @@ function AdminChamados() {
     }
 
     setIsAdmin(true)
+    setAdminPerfil(adminData.perfil || 'analista')
     setAuthChecked(true)
     await loadChamados()
   }
@@ -310,9 +312,14 @@ console.error('Erro e-mail:', emailError)
         </div>
 
         <nav className="adminNav">
-          <a className="active" href="/admin">Chamados</a>
-          <a href="/">Site principal</a>
-        </nav>
+  <a className="active" href="/admin">Chamados</a>
+
+  {adminPerfil === 'admin' && (
+    <a href="/admin/usuarios">Usuários</a>
+  )}
+
+  <a href="/">Site principal</a>
+</nav>
 
         <div className="adminUserBox">
           <small>Logado como</small>

@@ -1,0 +1,245 @@
+.usuariosShell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  background: #edf2f8;
+}
+
+.usuariosSidebar {
+  background: #071b3a;
+  color: white;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.usuariosBrand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.usuariosBrand img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 18px;
+  background: white;
+  padding: 6px;
+}
+
+.usuariosBrand strong {
+  display: block;
+  font-size: 20px;
+}
+
+.usuariosBrand span {
+  color: #b7c4d8;
+  font-size: 14px;
+}
+
+.usuariosNav {
+  display: grid;
+  gap: 10px;
+}
+
+.usuariosNav a {
+  color: #dbeafe;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.usuariosNav a.active,
+.usuariosNav a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.usuariosUserBox {
+  margin-top: auto;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 18px;
+  border-radius: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.usuariosUserBox small {
+  color: #b7c4d8;
+}
+
+.usuariosUserBox strong {
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.usuariosUserBox button,
+.usuariosHeader button,
+.usuariosForm button,
+.usuariosCenter button {
+  border: 0;
+  background: #22d18b;
+  color: #071b3a;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.usuariosContent {
+  padding: 40px;
+}
+
+.usuariosHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.usuariosHeader h1 {
+  font-size: 42px;
+  color: #071b3a;
+  margin: 0;
+}
+
+.usuariosHeader p {
+  color: #5a6b82;
+  font-size: 17px;
+}
+
+.usuariosForm {
+  background: white;
+  border-radius: 22px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 1fr 180px 160px;
+  gap: 14px;
+  margin-bottom: 24px;
+  box-shadow: 0 14px 36px rgba(7, 27, 58, 0.08);
+}
+
+.usuariosForm input,
+.usuariosForm select,
+.usuariosTable select {
+  height: 52px;
+  border: 1px solid #d7deea;
+  border-radius: 14px;
+  padding: 0 14px;
+  background: white;
+  color: #071b3a;
+  font-size: 15px;
+}
+
+.usuariosTableWrapper {
+  background: white;
+  border-radius: 24px;
+  overflow-x: auto;
+  box-shadow: 0 14px 36px rgba(7, 27, 58, 0.08);
+}
+
+.usuariosTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.usuariosTable th {
+  text-align: left;
+  padding: 18px;
+  color: #44556c;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  background: #f8fafc;
+}
+
+.usuariosTable td {
+  padding: 18px;
+  border-top: 1px solid #edf2f8;
+  color: #071b3a;
+}
+
+.statusAtivo,
+.statusInativo {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.statusAtivo {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.statusInativo {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.ativarButton {
+  background: #22d18b;
+  color: #071b3a;
+}
+
+.desativarButton {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.usuariosPageSimple {
+  min-height: 100vh;
+  background: #edf2f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.usuariosCenter {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 14px 36px rgba(7, 27, 58, 0.08);
+}
+
+@media (max-width: 700px) {
+  .usuariosShell {
+    display: block;
+  }
+
+  .usuariosSidebar {
+    height: auto;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 16px;
+  }
+
+  .usuariosNav {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .usuariosContent {
+    padding: 16px;
+  }
+
+  .usuariosHeader {
+    display: grid;
+  }
+
+  .usuariosHeader h1 {
+    font-size: 30px;
+  }
+
+  .usuariosForm {
+    grid-template-columns: 1fr;
+  }
+}
