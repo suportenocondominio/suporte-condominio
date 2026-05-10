@@ -81,6 +81,16 @@ function AdminChamados() {
       return
     }
 
+    await supabase.functions.invoke('notificar-cliente-chamado', {
+  body: {
+    chamadoId: selectedChamado.id,
+    ticketId: selectedChamado.ticket_id,
+    clienteNome: selectedChamado.nome,
+    clienteEmail: selectedChamado.email,
+    mensagem: novaMensagem.trim() || 'O suporte enviou uma nova atualização no seu chamado.',
+  },
+})
+
     setChamados(data || [])
     setLoading(false)
   }
@@ -147,7 +157,7 @@ function AdminChamados() {
     const mensagem = {
       chamado_id: selectedChamado.id,
       user_id: user.id,
-      mensagem: novaMensagem.trim() || null,
+      mensagem: novaMensagem.trim() || ' ',
       autor_nome: user.user_metadata?.full_name || user.email,
       autor_email: user.email,
       autor_tipo: 'admin',
@@ -168,6 +178,17 @@ function AdminChamados() {
       setEnviandoMensagem(false)
       return
     }
+
+await supabase.functions.invoke('notificar-cliente-chamado', {
+  body: {
+    ticketId: selectedChamado.ticket_id,
+    clienteNome: selectedChamado.nome,
+    clienteEmail: selectedChamado.email,
+    mensagem:
+      novaMensagem.trim() ||
+      'O suporte enviou uma nova atualização no seu chamado.',
+  },
+})
 
     setMensagens((prev) => [...prev, data])
     setNovaMensagem('')
@@ -369,6 +390,8 @@ function AdminChamados() {
             <p>Altere o filtro ou aguarde novos chamados.</p>
           </div>
         ) : (
+          
+                 
           <div className="tableWrapper">
             <table className="chamadosTable">
               <thead>
@@ -442,6 +465,8 @@ function AdminChamados() {
               </tbody>
             </table>
           </div>
+
+          
         )}
 
         {showModal && selectedChamado && (

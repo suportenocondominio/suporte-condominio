@@ -312,6 +312,20 @@
   background: #0b2a5c;
 }
 
+.ticketLink {
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ticketLink:hover {
+  text-decoration: underline;
+}
+
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -506,13 +520,19 @@
   width: 100%;
   min-height: 110px;
   resize: vertical;
+  background: #ffffff !important;
   border: 1px solid #cbd5e1;
   border-radius: 16px;
   padding: 16px;
   font-size: 15px;
-  color: #071b3a;
+  color: #071b3a !important;
   outline: none;
   box-sizing: border-box;
+  caret-color: #071b3a;
+}
+
+.respostaBox textarea::placeholder {
+  color: #7b8798;
 }
 
 .respostaBox input[type="file"] {
@@ -605,33 +625,152 @@
 }
 
 @media (max-width: 700px) {
-  .adminCards {
-    grid-template-columns: 1fr;
+  .adminShell {
+    display: block;
+    min-height: 100vh;
+  }
+
+  .adminSidebar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: auto;
+    padding: 16px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    box-shadow: 0 12px 30px rgba(7, 27, 58, 0.18);
+  }
+
+  .adminBrand {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .adminBrand img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .adminNav {
+    display: none;
+  }
+
+  .adminUserBox {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .adminUserBox strong {
+    font-size: 12px;
+  }
+
+  .adminUserBox button {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .adminContent {
+    padding: 16px;
   }
 
   .adminHeader {
-    flex-direction: column;
+    display: grid;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .adminHeader h1 {
+    font-size: 30px;
+    line-height: 1.1;
+  }
+
+  .adminHeader p {
+    font-size: 15px;
+  }
+
+  .adminHeader button {
+    width: 100%;
+    height: 52px;
+    border-radius: 16px;
+  }
+
+  .adminCards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .adminCards div {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .adminCards strong {
+    font-size: 26px;
+  }
+
+  .adminFilters {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .adminFilters input,
+  .adminFilters select {
+    height: 52px;
+    font-size: 16px;
+  }
+
+  .tableWrapper {
+    background: white;
+    box-shadow: 0 14px 36px rgba(7, 27, 58, 0.08);
+    overflow-x: auto;
+    border-radius: 18px;
+  }
+
+  .chamadosTable {
+    display: table;
+    min-width: 950px;
+  }
+
+  .modalOverlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modalChamado {
+    width: 100%;
+    max-width: 100%;
+    max-height: 94vh;
+    border-radius: 28px 28px 0 0;
+    padding: 22px;
   }
 
   .modalHeader {
     flex-direction: column;
+    padding-right: 20px;
   }
 
-  .modalChamado {
-    padding: 24px;
+  .modalHeader h2 {
+    font-size: 24px;
   }
-}
 
-.ticketLink {
-  border: 0;
-  background: transparent;
-  color: #1d4ed8;
-  font-weight: 900;
-  font-size: 15px;
-  cursor: pointer;
-  padding: 0;
-}
+  .mensagensHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.ticketLink:hover {
-  text-decoration: underline;
+  .mensagemMeta {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .respostaBox textarea {
+    min-height: 120px;
+    font-size: 16px;
+  }
+
+  .respostaBox button {
+    width: 100%;
+    height: 52px;
+  }
 }
