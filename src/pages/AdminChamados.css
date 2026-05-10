@@ -774,3 +774,22 @@
     height: 52px;
   }
 }
+
+@media (max-width: 700px) {
+  .adminNav {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .adminNav a {
+    text-align: center;
+    padding: 13px 10px;
+    font-size: 14px;
+  }
+
+  .adminNav a:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
