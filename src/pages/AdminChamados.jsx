@@ -169,16 +169,22 @@ function AdminChamados() {
       return
     }
 
-await supabase.functions.invoke('notificar-cliente-chamado', {
-  body: {
-    ticketId: selectedChamado.ticket_id,
-    clienteNome: selectedChamado.nome,
-    clienteEmail: selectedChamado.email,
-    mensagem:
-      novaMensagem.trim() ||
-      'O suporte enviou uma nova atualização no seu chamado.',
-  },
-})
+const { data: emailData, error: emailError } = await supabase.functions.invoke(
+  'notificar-cliente-chamado',
+  {
+    body: {
+      ticketId: selectedChamado.ticket_id,
+      clienteNome: selectedChamado.nome,
+      clienteEmail: selectedChamado.email,
+      mensagem:
+        novaMensagem.trim() ||
+        'O suporte enviou uma nova atualização no seu chamado.',
+    },
+  }
+)
+
+console.log('Retorno e-mail:', emailData)
+console.error('Erro e-mail:', emailError)
 
     setMensagens((prev) => [...prev, data])
     setNovaMensagem('')

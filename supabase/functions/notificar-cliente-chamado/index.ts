@@ -58,9 +58,15 @@ serve(async (req) => {
       }),
     })
 
-    const data = await response.json()
+const data = await response.json()
 
-    return new Response(JSON.stringify(data), {
+console.log('RESEND STATUS:', response.status)
+console.log('RESEND DATA:', data)
+
+return new Response(JSON.stringify({
+  status: response.status,
+  data,
+}), {
       status: response.status,
       headers: {
         "Content-Type": "application/json",
