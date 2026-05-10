@@ -520,8 +520,7 @@ function App() {
             <a href="#servicos">Serviços</a>
             <a href="#sobre">Sobre</a>
             <a href="#contato">Contato</a>
-            <a href="/admin">Área do analista</a>
-          </nav>
+            </nav>
 
         {user ? (
   <button className="premiumWhatsapp" onClick={() => setShowPerfilModal(true)}>
