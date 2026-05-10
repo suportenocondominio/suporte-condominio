@@ -20,21 +20,26 @@
 .usuariosBrand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
 }
 
 .usuariosBrand img {
-  width: 72px;
-  height: 72px;
+  width: 92px;
+  height: 92px;
   object-fit: contain;
-  border-radius: 18px;
-  background: white;
-  padding: 6px;
+  border-radius: 20px;
+}
+
+.usuariosBrand div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .usuariosBrand strong {
   display: block;
   font-size: 20px;
+  line-height: 1;
 }
 
 .usuariosBrand span {
@@ -49,10 +54,11 @@
 
 .usuariosNav a {
   color: #dbeafe;
-  padding: 14px 16px;
-  border-radius: 14px;
-  font-weight: 800;
+  padding: 16px;
+  border-radius: 16px;
+  font-weight: 900;
   text-decoration: none;
+  text-align: center;
 }
 
 .usuariosNav a.active,
@@ -85,60 +91,65 @@
   border: 0;
   background: #22d18b;
   color: #071b3a;
-  padding: 12px 16px;
-  border-radius: 12px;
+  padding: 14px 18px;
+  border-radius: 14px;
   font-weight: 900;
   cursor: pointer;
 }
 
 .usuariosContent {
   padding: 40px;
+  min-width: 0;
 }
 
 .usuariosHeader {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .usuariosHeader h1 {
-  font-size: 42px;
+  font-size: 52px;
+  line-height: 1;
   color: #071b3a;
   margin: 0;
 }
 
 .usuariosHeader p {
+  margin-top: 10px;
   color: #5a6b82;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .usuariosForm {
   background: white;
-  border-radius: 22px;
-  padding: 22px;
+  border-radius: 24px;
+  padding: 26px;
   display: grid;
   grid-template-columns: 1fr 180px 160px;
   gap: 14px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   box-shadow: 0 14px 36px rgba(7, 27, 58, 0.08);
 }
 
 .usuariosForm input,
 .usuariosForm select,
 .usuariosTable select {
-  height: 52px;
+  height: 54px;
   border: 1px solid #d7deea;
-  border-radius: 14px;
-  padding: 0 14px;
+  border-radius: 16px;
+  padding: 0 16px;
   background: white;
   color: #071b3a;
   font-size: 15px;
+  outline: none;
 }
 
 .usuariosTableWrapper {
   background: white;
-  border-radius: 24px;
+  border-radius: 26px;
   overflow-x: auto;
   box-shadow: 0 14px 36px rgba(7, 27, 58, 0.08);
 }
@@ -151,7 +162,7 @@
 
 .usuariosTable th {
   text-align: left;
-  padding: 18px;
+  padding: 20px;
   color: #44556c;
   font-size: 13px;
   font-weight: 900;
@@ -160,15 +171,16 @@
 }
 
 .usuariosTable td {
-  padding: 18px;
+  padding: 20px;
   border-top: 1px solid #edf2f8;
   color: #071b3a;
+  font-size: 16px;
 }
 
 .statusAtivo,
 .statusInativo {
   display: inline-flex;
-  padding: 8px 12px;
+  padding: 8px 14px;
   border-radius: 999px;
   font-weight: 900;
   font-size: 13px;
@@ -184,14 +196,23 @@
   color: #b91c1c;
 }
 
+.desativarButton,
 .ativarButton {
-  background: #22d18b;
-  color: #071b3a;
+  border: 0;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-weight: 900;
+  cursor: pointer;
 }
 
 .desativarButton {
   background: #fee2e2;
   color: #b91c1c;
+}
+
+.ativarButton {
+  background: #dcfce7;
+  color: #15803d;
 }
 
 .usuariosPageSimple {
@@ -210,21 +231,55 @@
   box-shadow: 0 14px 36px rgba(7, 27, 58, 0.08);
 }
 
+@media (max-width: 1000px) {
+  .usuariosShell {
+    grid-template-columns: 1fr;
+  }
+
+  .usuariosSidebar {
+    height: auto;
+    position: static;
+  }
+
+  .usuariosContent {
+    padding: 24px;
+  }
+
+  .usuariosForm {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 700px) {
   .usuariosShell {
     display: block;
   }
 
   .usuariosSidebar {
-    height: auto;
     position: sticky;
     top: 0;
     z-index: 50;
     padding: 16px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+  }
+
+  .usuariosBrand {
+    justify-content: center;
+  }
+
+  .usuariosBrand img {
+    width: 76px;
+    height: 76px;
   }
 
   .usuariosNav {
     grid-template-columns: 1fr 1fr;
+    margin-top: 12px;
+  }
+
+  .usuariosNav a:nth-child(3) {
+    grid-column: 1 / -1;
   }
 
   .usuariosContent {
@@ -233,13 +288,23 @@
 
   .usuariosHeader {
     display: grid;
+    text-align: center;
   }
 
   .usuariosHeader h1 {
-    font-size: 30px;
+    font-size: 34px;
+  }
+
+  .usuariosHeader p {
+    font-size: 15px;
+  }
+
+  .usuariosHeader button {
+    width: 100%;
   }
 
   .usuariosForm {
     grid-template-columns: 1fr;
+    padding: 20px;
   }
 }
