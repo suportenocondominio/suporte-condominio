@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import LoginButton from './LoginButton'
 
-function ChamadoForm({ initialView = 'abrir', perfilCliente = null }) {
+function ChamadoForm({
+  initialView = 'abrir',
+  perfilCliente = null,
+  servicoInicial = '',
+}) {
   const [activeView, setActiveView] = useState(initialView)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -23,7 +27,7 @@ function ChamadoForm({ initialView = 'abrir', perfilCliente = null }) {
     telefone: '',
     condominio: '',
     apartamento: '',
-    servico: '',
+    servico: servicoInicial || '',
     urgencia: 'Normal',
     descricao: '',
   })
