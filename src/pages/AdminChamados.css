@@ -612,13 +612,13 @@
   }
 
   .adminSidebar {
-    position: sticky;
-    top: 0;
-    z-index: 50;
+    position: static;
+    top: auto;
+    z-index: auto;
     height: auto;
-    padding: 16px;
-    border-bottom-left-radius: 24px;
-    border-bottom-right-radius: 24px;
+    padding: 12px 14px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
 
   .adminBrand {
