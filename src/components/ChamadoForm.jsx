@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import LoginButton from './LoginButton'
 
-function ChamadoForm({
-  initialView = 'abrir',
-  perfilCliente = null,
-  servicoInicial = '',
-}) {
+function ChamadoForm({ initialView = 'abrir', perfilCliente = null, servicoInicial = '' }) {
   const [activeView, setActiveView] = useState(initialView)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -35,6 +31,15 @@ function ChamadoForm({
   useEffect(() => {
     setActiveView(initialView)
   }, [initialView])
+
+  useEffect(() => {
+    if (servicoInicial) {
+      setForm((prev) => ({
+        ...prev,
+        servico: servicoInicial,
+      }))
+    }
+  }, [servicoInicial])
 
   useEffect(() => {
     if (perfilCliente) {
@@ -182,7 +187,7 @@ function ChamadoForm({
       apartamento: `${perfilCliente?.bloco ? `Bloco ${perfilCliente.bloco} - ` : ''}${
         perfilCliente?.apartamento || ''
       }`,
-      servico: '',
+      servico: servicoInicial || '',
       urgencia: 'Normal',
       descricao: '',
     })

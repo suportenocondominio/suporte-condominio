@@ -19,6 +19,7 @@ import {
   Home,
   User,
   ChevronRight,
+  PlusCircle,
   ArrowLeft,
 } from 'lucide-react'
 
@@ -28,7 +29,6 @@ function AppHome({ user, setUser }) {
   const [perfilCliente, setPerfilCliente] = useState(null)
   const [showPerfilModal, setShowPerfilModal] = useState(false)
   const [salvandoPerfil, setSalvandoPerfil] = useState(false)
-
   const [selectedService, setSelectedService] = useState(null)
   const [servicoSelecionado, setServicoSelecionado] = useState('')
 
@@ -59,13 +59,12 @@ function AppHome({ user, setUser }) {
       .maybeSingle()
 
     if (error) {
-      console.error(error)
+      console.error('Erro ao carregar perfil:', error)
       return
     }
 
     if (data) {
       setPerfilCliente(data)
-
       setPerfilForm({
         nome: data.nome || '',
         telefone: data.telefone || '',
@@ -89,26 +88,25 @@ function AppHome({ user, setUser }) {
   const abrirChamado = (servico = '') => {
     if (!user) return
 
+    setServicoSelecionado(servico)
+
     if (!perfilEstaCompleto()) {
       setShowPerfilModal(true)
       return
     }
 
-    setServicoSelecionado(servico)
     setChamadoMode('abrir')
     setShowChamado(true)
   }
 
   const acompanharChamados = () => {
     if (!user) return
-
     setChamadoMode('acompanhar')
     setShowChamado(true)
   }
 
   const salvarPerfilCliente = async (e) => {
     e.preventDefault()
-
     if (!user) return
 
     setSalvandoPerfil(true)
@@ -134,12 +132,23 @@ function AppHome({ user, setUser }) {
 
     if (error) {
       alert('Erro ao salvar cadastro.')
+      console.error(error)
       return
     }
 
     setPerfilCliente(data)
     setShowPerfilModal(false)
+
+    if (servicoSelecionado) {
+      setChamadoMode('abrir')
+      setShowChamado(true)
+    }
   }
+
+  const whatsappBase = 'https://wa.me/5511952491217'
+  const whatsapp = `${whatsappBase}?text=${encodeURIComponent(
+    'Olá! Vim pelo app Suporte no Condomínio e gostaria de solicitar um atendimento.'
+  )}`
 
   const services = [
     {
@@ -147,12 +156,12 @@ function AppHome({ user, setUser }) {
       title: 'Computadores',
       desc: 'Notebook lento e manutenção.',
       details: [
-        'Formatação',
-        'Troca de SSD',
-        'Upgrade de memória',
-        'Limpeza interna',
-        'Notebook lento',
+        'Formatação e reinstalação do sistema',
+        'Notebook ou computador lento',
         'Instalação de programas',
+        'Limpeza e manutenção preventiva',
+        'Troca de SSD e upgrade de memória',
+        'Diagnóstico de falhas e travamentos',
       ],
     },
     {
@@ -160,10 +169,11 @@ function AppHome({ user, setUser }) {
       title: 'Wi-Fi',
       desc: 'Internet e roteadores.',
       details: [
-        'Configuração de roteador',
-        'Rede mesh',
-        'Melhoria de sinal',
-        'Internet caindo',
+        'Configuração de roteadores',
+        'Melhoria de sinal Wi-Fi',
+        'Instalação de rede mesh',
+        'Internet instável ou caindo',
+        'Organização de rede residencial',
       ],
     },
     {
@@ -171,10 +181,11 @@ function AppHome({ user, setUser }) {
       title: 'Câmeras',
       desc: 'Instalação e configuração.',
       details: [
-        'Instalação',
-        'Configuração no celular',
-        'Acesso remoto',
-        'DVR/NVR',
+        'Instalação de câmeras',
+        'Configuração de DVR/NVR',
+        'Acesso remoto pelo celular',
+        'Ajuste de gravação e visualização',
+        'Organização de cabeamento',
       ],
     },
     {
@@ -182,10 +193,11 @@ function AppHome({ user, setUser }) {
       title: 'Elétrica',
       desc: 'Pequenos reparos.',
       details: [
-        'Tomadas',
-        'Disjuntores',
-        'Iluminação',
-        'Ventiladores',
+        'Troca de tomadas e interruptores',
+        'Instalação de luminárias',
+        'Pequenos reparos elétricos',
+        'Instalação de ventiladores',
+        'Avaliação básica de pontos elétricos',
       ],
     },
     {
@@ -193,10 +205,11 @@ function AppHome({ user, setUser }) {
       title: 'Segurança',
       desc: 'Proteção digital.',
       details: [
-        'Remoção de vírus',
-        'Proteção contra golpes',
-        'Segurança de contas',
-        'Backup seguro',
+        'Remoção de vírus e ameaças',
+        'Proteção contra golpes digitais',
+        'Configuração de senhas e contas',
+        'Orientação de segurança para celular e computador',
+        'Proteção de dados pessoais',
       ],
     },
     {
@@ -204,49 +217,53 @@ function AppHome({ user, setUser }) {
       title: 'Backup',
       desc: 'SSD e upgrades.',
       details: [
-        'Backup de arquivos',
-        'Troca para SSD',
-        'Upgrade',
-        'Migração de dados',
+        'Backup de arquivos importantes',
+        'Migração de dados para SSD',
+        'Recuperação e organização de arquivos',
+        'Upgrade de armazenamento',
+        'Configuração de cópias de segurança',
       ],
     },
   ]
 
-  if (showChamado) {
+  if (!user) {
     return (
-      <ChamadoForm
-        initialView={chamadoMode}
-        perfilCliente={perfilCliente}
-        servicoInicial={servicoSelecionado}
-      />
+      <main className="appMode appAuthMode">
+        <section className="appAuthCard">
+          <img src={logo} alt="Suporte no Condomínio" className="appAuthLogo" />
+
+          <h1>Suporte no Condomínio</h1>
+          <p>Entre para abrir chamados, acompanhar atendimentos e falar com nossa equipe.</p>
+
+          <div className="appAuthLogin">
+            <LoginButton />
+          </div>
+        </section>
+      </main>
     )
   }
 
   if (selectedService) {
     return (
-      <main className="serviceDetailsPage">
-        <div className="serviceDetailsHeader">
-          <button
-            className="serviceBackButton"
-            onClick={() => setSelectedService(null)}
-          >
-            <ArrowLeft size={18} />
-            Voltar
-          </button>
-        </div>
+      <main className="appMode">
+        <button
+          type="button"
+          className="serviceBackButton"
+          onClick={() => setSelectedService(null)}
+        >
+          <ArrowLeft size={18} />
+          Voltar
+        </button>
 
         <section className="serviceDetailsCard">
-          <div className="serviceDetailsIcon">
-            {selectedService.icon}
-          </div>
+          <div className="serviceDetailsIcon">{selectedService.icon}</div>
 
           <h1>{selectedService.title}</h1>
-
           <p>{selectedService.desc}</p>
 
           <div className="serviceDetailsList">
-            {selectedService.details.map((item, index) => (
-              <div key={index} className="serviceDetailsItem">
+            {selectedService.details.map((item) => (
+              <div className="serviceDetailsItem" key={item}>
                 <CheckCircle2 size={18} />
                 <span>{item}</span>
               </div>
@@ -254,10 +271,11 @@ function AppHome({ user, setUser }) {
           </div>
 
           <button
+            type="button"
             className="serviceOpenButton"
             onClick={() => abrirChamado(selectedService.title)}
           >
-            Abrir chamado
+            Abrir chamado de {selectedService.title}
           </button>
         </section>
       </main>
@@ -266,79 +284,205 @@ function AppHome({ user, setUser }) {
 
   return (
     <main className="appMode">
-      <header className="appHeader">
-        <img src={logo} alt="Logo" className="appLogo" />
+      <header className="appHeaderPremium">
+        <div className="appBrandCompact">
+          <img src={logo} alt="Suporte no Condomínio" className="appLogoCompact" />
 
-        <div className="appHeaderButtons">
-          <a
-            href="https://wa.me/5511952491217"
-            target="_blank"
-            rel="noreferrer"
-            className="miniButton"
-          >
-            <MessageCircle size={18} />
-            WhatsApp
-          </a>
-
-          <button
-            className="miniButton"
-            onClick={() => setShowPerfilModal(true)}
-          >
-            <User size={18} />
-            Conta
-          </button>
+          <div>
+            <strong>Suporte no Condomínio</strong>
+            <span>Central de atendimento</span>
+          </div>
         </div>
       </header>
 
+      <section className="appHero">
+        <h2>Olá, {perfilCliente?.nome || user.user_metadata?.full_name || 'morador'} </h2>
+        <p>Solicite suporte, acompanhe chamados e fale com nossa equipe.</p>
+      </section>
+
+      <section className="appQuickPanel">
+        <button className="appMainShortcut" onClick={abrirChamado}>
+          <div className="appShortcutIcon">
+            <PlusCircle size={24} />
+          </div>
+
+          <div>
+            <strong>Abrir chamado</strong>
+            <span>Abra um chamado para nossa equipe</span>
+          </div>
+
+          <ChevronRight size={22} />
+        </button>
+
+        <button className="appMainShortcut appMainShortcutSecondary" onClick={acompanharChamados}>
+          <div className="appShortcutIcon">
+            <CheckCircle2 size={24} />
+          </div>
+
+          <div>
+            <strong>Meus chamados</strong>
+            <span>Acompanhe respostas e status</span>
+          </div>
+
+          <ChevronRight size={22} />
+        </button>
+
+        <div className="appMiniActions">
+          <a href={whatsapp} target="_blank" rel="noreferrer" className="appMiniAction">
+            <MessageCircle size={20} />
+            <span>WhatsApp</span>
+          </a>
+
+          <button className="appMiniAction" onClick={() => setShowPerfilModal(true)}>
+            <User size={20} />
+            <span>Conta</span>
+          </button>
+        </div>
+      </section>
+
       <section className="appServices">
-        <span className="appSectionLabel">SERVIÇOS</span>
+        <div className="sectionHeader">
+          <span>Serviços</span>
+          <h2>Atendimento residencial</h2>
+        </div>
 
-        <h2>Atendimento residencial</h2>
-
-        <div className="appServicesGrid">
+        <div className="servicesGrid">
           {services.map((service) => (
-            <button
+            <div
+              className="serviceCard"
               key={service.title}
-              className="appServiceCard"
+              role="button"
+              tabIndex={0}
               onClick={() => setSelectedService(service)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  setSelectedService(service)
+                }
+              }}
             >
-              <div className="appServiceIcon">
-                {service.icon}
-              </div>
-
-              <div className="appServiceContent">
-                <strong>{service.title}</strong>
-                <span>{service.desc}</span>
-              </div>
-
-              <ChevronRight size={22} />
-            </button>
+              <div className="serviceIcon">{service.icon}</div>
+              <h3>{service.title}</h3>
+              <p>{service.desc}</p>
+              <ChevronRight className="serviceChevron" size={20} />
+            </div>
           ))}
         </div>
       </section>
 
       <nav className="bottomNav">
-        <button className="bottomNavItem active">
+        <a href="#">
           <Home size={22} />
           <span>Início</span>
-        </button>
+        </a>
 
-        <button
-          className="bottomNavItem"
-          onClick={acompanharChamados}
-        >
+        <button type="button" onClick={acompanharChamados}>
           <CheckCircle2 size={22} />
           <span>Chamados</span>
         </button>
 
-        <button
-          className="bottomNavItem"
-          onClick={() => setShowPerfilModal(true)}
-        >
+        <button type="button" onClick={() => setShowPerfilModal(true)}>
           <User size={22} />
           <span>Conta</span>
         </button>
       </nav>
+
+      {showChamado && (
+        <div className="modalOverlay">
+          <div className="modalContent appModalContent">
+            <button className="closeModal" onClick={() => setShowChamado(false)}>
+              ×
+            </button>
+
+            <ChamadoForm initialView={chamadoMode} perfilCliente={perfilCliente} servicoInicial={servicoSelecionado} />
+          </div>
+        </div>
+      )}
+
+      {showPerfilModal && (
+        <div className="modalOverlay">
+          <div className="modalContent perfilModalContent">
+            <button className="closeModal" onClick={() => setShowPerfilModal(false)}>
+              ×
+            </button>
+
+            
+<h2>Minha conta</h2>
+
+<div className="accountLinks">
+  <a href="/politica-privacidade" target="_blank" rel="noreferrer">
+    Política de Privacidade
+  </a>
+
+  <a href="/termos-de-uso" target="_blank" rel="noreferrer">
+    Termos de Uso
+  </a>
+
+  <a href="/excluir-conta" target="_blank" rel="noreferrer" className="dangerLink">
+    Excluir minha conta
+  </a>
+</div>
+            <form className="perfilForm" onSubmit={salvarPerfilCliente}>
+              <label>
+                Nome completo
+                <input
+                  type="text"
+                  value={perfilForm.nome}
+                  onChange={(e) => setPerfilForm({ ...perfilForm, nome: e.target.value })}
+                  required
+                />
+              </label>
+
+              <label>
+                Telefone
+                <input
+                  type="tel"
+                  value={perfilForm.telefone}
+                  onChange={(e) => setPerfilForm({ ...perfilForm, telefone: e.target.value })}
+                  required
+                />
+              </label>
+
+              <label>
+                Condomínio
+                <input
+                  type="text"
+                  value={perfilForm.condominio}
+                  onChange={(e) => setPerfilForm({ ...perfilForm, condominio: e.target.value })}
+                  required
+                />
+              </label>
+
+              <label>
+                Apartamento
+                <input
+                  type="text"
+                  value={perfilForm.apartamento}
+                  onChange={(e) => setPerfilForm({ ...perfilForm, apartamento: e.target.value })}
+                  required
+                />
+              </label>
+
+              <button type="submit" className="premiumPrimaryButton" disabled={salvandoPerfil}>
+                {salvandoPerfil ? 'Salvando...' : 'Salvar'}
+              </button>
+
+              <button
+                type="button"
+                className="perfilLogoutButton"
+                onClick={async () => {
+                  await supabase.auth.signOut()
+                  setUser(null)
+                  setPerfilCliente(null)
+                  setShowPerfilModal(false)
+                  setShowChamado(false)
+                }}
+              >
+                Sair da conta
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
