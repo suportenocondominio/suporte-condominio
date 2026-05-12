@@ -552,9 +552,7 @@ function WebsiteHome({ user, setUser }) {
     Termos de Uso
   </a>
 
-  <a href="/excluir-conta">
-    Excluir Conta
-  </a>
+
 </div>
       </footer>
 
@@ -653,6 +651,33 @@ function WebsiteHome({ user, setUser }) {
               <button type="submit" className="premiumPrimaryButton" disabled={salvandoPerfil}>
                 {salvandoPerfil ? 'Salvando...' : 'Salvar cadastro'}
               </button>
+
+<div className="accountLinks">
+  <a
+    href="/politica-privacidade"
+    target="_blank"
+    rel="noreferrer"
+  >
+    Política de Privacidade
+  </a>
+
+  <a
+    href="/termos-de-uso"
+    target="_blank"
+    rel="noreferrer"
+  >
+    Termos de Uso
+  </a>
+
+  <a
+    href="/excluir-conta"
+    target="_blank"
+    rel="noreferrer"
+    className="dangerLink"
+  >
+    Excluir minha conta
+  </a>
+</div>
 
               <button
                 type="button"
