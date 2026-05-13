@@ -187,7 +187,7 @@ function ChamadoForm({ initialView = 'abrir', perfilCliente = null, servicoInici
       apartamento: `${perfilCliente?.bloco ? `Bloco ${perfilCliente.bloco} - ` : ''}${
         perfilCliente?.apartamento || ''
       }`,
-      servico: servicoInicial || '',
+      servico: '',
       urgencia: 'Normal',
       descricao: '',
     })
@@ -221,55 +221,55 @@ function ChamadoForm({ initialView = 'abrir', perfilCliente = null, servicoInici
   }
 
   async function enviarMensagemCliente() {
-  if (!selectedChamado) return
+    if (!selectedChamado) return
 
-  const temMensagem = novaMensagem.trim().length > 0
-  const temArquivo = !!arquivo
+    const temMensagem = novaMensagem.trim().length > 0
+    const temArquivo = !!arquivo
 
-  if (!temMensagem && !temArquivo) {
-    alert('Digite uma mensagem ou selecione uma imagem.')
-    return
-  }
+    if (!temMensagem && !temArquivo) {
+      alert('Digite uma mensagem ou selecione uma imagem.')
+      return
+    }
 
-  setEnviandoMensagem(true)
+    setEnviandoMensagem(true)
 
-  const anexo = await uploadArquivo(selectedChamado.id)
+    const anexo = await uploadArquivo(selectedChamado.id)
 
-  if (temArquivo && !anexo) {
+    if (temArquivo && !anexo) {
+      setEnviandoMensagem(false)
+      return
+    }
+
+    const mensagem = {
+      chamado_id: selectedChamado.id,
+      user_id: user.id,
+      mensagem: temMensagem ? novaMensagem.trim() : '',
+      autor_nome: perfilCliente?.nome || user.user_metadata?.full_name || user.email,
+      autor_email: user.email,
+      autor_tipo: 'cliente',
+      anexo_url: anexo?.url || null,
+      anexo_nome: anexo?.nome || null,
+      anexo_tipo: anexo?.tipo || null,
+    }
+
+    const { data, error } = await supabase
+      .from('mensagens_chamado')
+      .insert([mensagem])
+      .select()
+      .single()
+
+    if (error) {
+      console.error(error)
+      alert('Erro ao enviar mensagem.')
+      setEnviandoMensagem(false)
+      return
+    }
+
+    setMensagens((prev) => [...prev, data])
+    setNovaMensagem('')
+    setArquivo(null)
     setEnviandoMensagem(false)
-    return
   }
-
-  const mensagem = {
-    chamado_id: selectedChamado.id,
-    user_id: user.id,
-    mensagem: temMensagem ? novaMensagem.trim() : '',
-    autor_nome: perfilCliente?.nome || user.user_metadata?.full_name || user.email,
-    autor_email: user.email,
-    autor_tipo: 'cliente',
-    anexo_url: anexo?.url || null,
-    anexo_nome: anexo?.nome || null,
-    anexo_tipo: anexo?.tipo || null,
-  }
-
-  const { data, error } = await supabase
-    .from('mensagens_chamado')
-    .insert([mensagem])
-    .select()
-    .single()
-
-  if (error) {
-    console.error(error)
-    alert('Erro ao enviar mensagem.')
-    setEnviandoMensagem(false)
-    return
-  }
-
-  setMensagens((prev) => [...prev, data])
-  setNovaMensagem('')
-  setArquivo(null)
-  setEnviandoMensagem(false)
-}
 
   function formatDate(date) {
     if (!date) return '-'
@@ -430,8 +430,8 @@ function ChamadoForm({ initialView = 'abrir', perfilCliente = null, servicoInici
       )}
 
       {selectedChamado && (
-        <div className="clienteModalOverlay">
-          <div className="clienteModal">
+        <div className="clienteModalOverlay" onClick={fecharDetalhes}>
+          <div className="clienteModal" onClick={(e) => e.stopPropagation()}>
             <button className="clienteCloseModal" onClick={fecharDetalhes}>
               ×
             </button>

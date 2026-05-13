@@ -48,6 +48,8 @@ function AppHome({ user, setUser }) {
       setPerfilCliente(null)
       setShowChamado(false)
       setShowPerfilModal(false)
+      setSelectedService(null)
+      setServicoSelecionado('')
     }
   }, [user])
 
@@ -89,19 +91,22 @@ function AppHome({ user, setUser }) {
     if (!user) return
 
     setServicoSelecionado(servico)
-    setSelectedService(null)
 
     if (!perfilEstaCompleto()) {
       setShowPerfilModal(true)
       return
     }
 
+    setSelectedService(null)
     setChamadoMode('abrir')
     setShowChamado(true)
   }
 
   const acompanharChamados = () => {
     if (!user) return
+
+    setSelectedService(null)
+    setServicoSelecionado('')
     setChamadoMode('acompanhar')
     setShowChamado(true)
   }
@@ -159,12 +164,12 @@ function AppHome({ user, setUser }) {
       formValue: 'Suporte para computadores',
       desc: 'Notebook lento e manutenção.',
       details: [
-        'Formatação e reinstalação do sistema',
-        'Notebook ou computador lento',
+        'Notebook lento ou travando',
+        'Formatação e reinstalação',
+        'Troca para SSD',
+        'Upgrade de memória',
         'Instalação de programas',
         'Limpeza e manutenção preventiva',
-        'Troca de SSD e upgrade de memória',
-        'Diagnóstico de falhas e travamentos',
       ],
     },
     {
@@ -173,11 +178,12 @@ function AppHome({ user, setUser }) {
       formValue: 'Wi-Fi e internet',
       desc: 'Internet e roteadores.',
       details: [
-        'Configuração de roteadores',
-        'Melhoria de sinal Wi-Fi',
-        'Instalação de rede mesh',
-        'Internet instável ou caindo',
-        'Organização de rede residencial',
+        'Internet caindo',
+        'Configuração de roteador',
+        'Melhoria de sinal',
+        'Rede mesh',
+        'Organização da rede residencial',
+        'Orientação de melhor posicionamento',
       ],
     },
     {
@@ -187,10 +193,11 @@ function AppHome({ user, setUser }) {
       desc: 'Instalação e configuração.',
       details: [
         'Instalação de câmeras',
-        'Configuração de DVR/NVR',
-        'Acesso remoto pelo celular',
-        'Ajuste de gravação e visualização',
-        'Organização de cabeamento',
+        'Configuração no celular',
+        'Acesso remoto',
+        'DVR/NVR',
+        'Ajuste de gravação',
+        'Orientação de uso do aplicativo',
       ],
     },
     {
@@ -199,11 +206,12 @@ function AppHome({ user, setUser }) {
       formValue: 'Elétrica residencial',
       desc: 'Pequenos reparos.',
       details: [
-        'Troca de tomadas e interruptores',
-        'Instalação de luminárias',
-        'Pequenos reparos elétricos',
-        'Instalação de ventiladores',
-        'Avaliação básica de pontos elétricos',
+        'Tomadas',
+        'Iluminação',
+        'Pequenos reparos',
+        'Disjuntores',
+        'Instalação simples',
+        'Avaliação inicial do problema',
       ],
     },
     {
@@ -212,11 +220,12 @@ function AppHome({ user, setUser }) {
       formValue: 'Segurança digital',
       desc: 'Proteção digital.',
       details: [
-        'Remoção de vírus e ameaças',
-        'Proteção contra golpes digitais',
-        'Configuração de senhas e contas',
-        'Orientação de segurança para celular e computador',
-        'Proteção de dados pessoais',
+        'Remoção de vírus',
+        'Proteção contra golpes',
+        'Segurança de contas',
+        'Orientação de senhas',
+        'Backup seguro',
+        'Apoio em suspeita de invasão',
       ],
     },
     {
@@ -225,11 +234,12 @@ function AppHome({ user, setUser }) {
       formValue: 'Backup e upgrade',
       desc: 'SSD e upgrades.',
       details: [
-        'Backup de arquivos importantes',
-        'Migração de dados para SSD',
-        'Recuperação e organização de arquivos',
-        'Upgrade de armazenamento',
-        'Configuração de cópias de segurança',
+        'Backup de arquivos',
+        'Migração de dados',
+        'Troca para SSD',
+        'Upgrade de computador',
+        'Organização de arquivos',
+        'Proteção contra perda de dados',
       ],
     },
   ]
@@ -246,45 +256,6 @@ function AppHome({ user, setUser }) {
           <div className="appAuthLogin">
             <LoginButton />
           </div>
-        </section>
-      </main>
-    )
-  }
-
-  if (selectedService) {
-    return (
-      <main className="appMode">
-        <button
-          type="button"
-          className="serviceBackButton"
-          onClick={() => setSelectedService(null)}
-        >
-          <ArrowLeft size={18} />
-          Voltar
-        </button>
-
-        <section className="serviceDetailsCard">
-          <div className="serviceDetailsIcon">{selectedService.icon}</div>
-
-          <h1>{selectedService.title}</h1>
-          <p>{selectedService.desc}</p>
-
-          <div className="serviceDetailsList">
-            {selectedService.details.map((item) => (
-              <div className="serviceDetailsItem" key={item}>
-                <CheckCircle2 size={18} />
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            className="serviceOpenButton"
-            onClick={() => abrirChamado(selectedService.formValue)}
-          >
-            Abrir chamado de {selectedService.title}
-          </button>
         </section>
       </main>
     )
@@ -309,7 +280,7 @@ function AppHome({ user, setUser }) {
       </section>
 
       <section className="appQuickPanel">
-        <button className="appMainShortcut" onClick={abrirChamado}>
+        <button className="appMainShortcut" onClick={() => abrirChamado('')}>
           <div className="appShortcutIcon">
             <PlusCircle size={24} />
           </div>
@@ -356,23 +327,17 @@ function AppHome({ user, setUser }) {
 
         <div className="servicesGrid">
           {services.map((service) => (
-            <div
+            <button
+              type="button"
               className="serviceCard"
               key={service.title}
-              role="button"
-              tabIndex={0}
               onClick={() => setSelectedService(service)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  setSelectedService(service)
-                }
-              }}
             >
               <div className="serviceIcon">{service.icon}</div>
               <h3>{service.title}</h3>
               <p>{service.desc}</p>
               <ChevronRight className="serviceChevron" size={20} />
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -394,54 +359,88 @@ function AppHome({ user, setUser }) {
         </button>
       </nav>
 
-    {showChamado && (
-  <div
-    className="chamadoModalOverlay"
-    onClick={() => setShowChamado(false)}
-  >
-    <div
-      className="chamadoModal"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-        className="closeModalButton"
-        onClick={() => setShowChamado(false)}
-      >
-        ×
-      </button>
+      {selectedService && (
+        <div className="modalOverlay" onClick={() => setSelectedService(null)}>
+          <div className="modalContent appModalContent" onClick={(e) => e.stopPropagation()}>
+            <button className="closeModal" onClick={() => setSelectedService(null)}>
+              ×
+            </button>
 
-      <ChamadoForm
-        initialView={chamadoMode}
-        perfilCliente={perfilCliente}
-        servicoInicial={servicoSelecionado}
-      />
-    </div>
-  </div>
-)}
+            <button
+              type="button"
+              className="serviceBackButton"
+              onClick={() => setSelectedService(null)}
+            >
+              <ArrowLeft size={18} />
+              Voltar
+            </button>
+
+            <div className="serviceDetailsCard">
+              <div className="serviceDetailsIcon">{selectedService.icon}</div>
+
+              <h1>{selectedService.title}</h1>
+              <p>{selectedService.desc}</p>
+
+              <div className="serviceDetailsList">
+                {selectedService.details.map((item) => (
+                  <div className="serviceDetailsItem" key={item}>
+                    <CheckCircle2 size={18} />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                className="serviceOpenButton"
+                onClick={() => abrirChamado(selectedService.formValue)}
+              >
+                Abrir chamado
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showChamado && (
+        <div className="modalOverlay" onClick={() => setShowChamado(false)}>
+          <div className="modalContent appModalContent" onClick={(e) => e.stopPropagation()}>
+            <button className="closeModal" onClick={() => setShowChamado(false)}>
+              ×
+            </button>
+
+            <ChamadoForm
+              initialView={chamadoMode}
+              perfilCliente={perfilCliente}
+              servicoInicial={servicoSelecionado}
+            />
+          </div>
+        </div>
+      )}
 
       {showPerfilModal && (
-        <div className="modalOverlay">
-          <div className="modalContent perfilModalContent">
+        <div className="modalOverlay" onClick={() => setShowPerfilModal(false)}>
+          <div className="modalContent perfilModalContent" onClick={(e) => e.stopPropagation()}>
             <button className="closeModal" onClick={() => setShowPerfilModal(false)}>
               ×
             </button>
 
-            
-<h2>Minha conta</h2>
+            <h2>Minha conta</h2>
 
-<div className="accountLinks">
-  <a href="/politica-privacidade" target="_blank" rel="noreferrer">
-    Política de Privacidade
-  </a>
+            <div className="accountLinks">
+              <a href="/politica-privacidade" target="_blank" rel="noreferrer">
+                Política de Privacidade
+              </a>
 
-  <a href="/termos-de-uso" target="_blank" rel="noreferrer">
-    Termos de Uso
-  </a>
+              <a href="/termos-de-uso" target="_blank" rel="noreferrer">
+                Termos de Uso
+              </a>
 
-  <a href="/excluir-conta" target="_blank" rel="noreferrer" className="dangerLink">
-    Excluir minha conta
-  </a>
-</div>
+              <a href="/excluir-conta" target="_blank" rel="noreferrer" className="dangerLink">
+                Excluir minha conta
+              </a>
+            </div>
+
             <form className="perfilForm" onSubmit={salvarPerfilCliente}>
               <label>
                 Nome completo
@@ -496,6 +495,8 @@ function AppHome({ user, setUser }) {
                   setPerfilCliente(null)
                   setShowPerfilModal(false)
                   setShowChamado(false)
+                  setSelectedService(null)
+                  setServicoSelecionado('')
                 }}
               >
                 Sair da conta
