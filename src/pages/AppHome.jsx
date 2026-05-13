@@ -394,17 +394,30 @@ function AppHome({ user, setUser }) {
         </button>
       </nav>
 
-      {showChamado && (
-        <div className="modalOverlay">
-          <div className="modalContent appModalContent">
-            <button className="closeModal" onClick={() => setShowChamado(false)}>
-              ×
-            </button>
+    {showChamado && (
+  <div
+    className="chamadoModalOverlay"
+    onClick={() => setShowChamado(false)}
+  >
+    <div
+      className="chamadoModal"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        className="closeModalButton"
+        onClick={() => setShowChamado(false)}
+      >
+        ×
+      </button>
 
-            <ChamadoForm initialView={chamadoMode} perfilCliente={perfilCliente} servicoInicial={servicoSelecionado} />
-          </div>
-        </div>
-      )}
+      <ChamadoForm
+        initialView={chamadoMode}
+        perfilCliente={perfilCliente}
+        servicoInicial={servicoSelecionado}
+      />
+    </div>
+  </div>
+)}
 
       {showPerfilModal && (
         <div className="modalOverlay">
