@@ -89,6 +89,7 @@ function AppHome({ user, setUser }) {
     if (!user) return
 
     setServicoSelecionado(servico)
+    setSelectedService(null)
 
     if (!perfilEstaCompleto()) {
       setShowPerfilModal(true)
@@ -140,6 +141,7 @@ function AppHome({ user, setUser }) {
     setShowPerfilModal(false)
 
     if (servicoSelecionado) {
+      setSelectedService(null)
       setChamadoMode('abrir')
       setShowChamado(true)
     }
@@ -154,6 +156,7 @@ function AppHome({ user, setUser }) {
     {
       icon: <Laptop size={24} />,
       title: 'Computadores',
+      formValue: 'Suporte para computadores',
       desc: 'Notebook lento e manutenção.',
       details: [
         'Formatação e reinstalação do sistema',
@@ -167,6 +170,7 @@ function AppHome({ user, setUser }) {
     {
       icon: <Wifi size={24} />,
       title: 'Wi-Fi',
+      formValue: 'Wi-Fi e internet',
       desc: 'Internet e roteadores.',
       details: [
         'Configuração de roteadores',
@@ -179,6 +183,7 @@ function AppHome({ user, setUser }) {
     {
       icon: <Camera size={24} />,
       title: 'Câmeras',
+      formValue: 'Câmeras de segurança',
       desc: 'Instalação e configuração.',
       details: [
         'Instalação de câmeras',
@@ -191,6 +196,7 @@ function AppHome({ user, setUser }) {
     {
       icon: <Plug size={24} />,
       title: 'Elétrica',
+      formValue: 'Elétrica residencial',
       desc: 'Pequenos reparos.',
       details: [
         'Troca de tomadas e interruptores',
@@ -203,6 +209,7 @@ function AppHome({ user, setUser }) {
     {
       icon: <ShieldCheck size={24} />,
       title: 'Segurança',
+      formValue: 'Segurança digital',
       desc: 'Proteção digital.',
       details: [
         'Remoção de vírus e ameaças',
@@ -215,6 +222,7 @@ function AppHome({ user, setUser }) {
     {
       icon: <HardDrive size={24} />,
       title: 'Backup',
+      formValue: 'Backup e upgrade',
       desc: 'SSD e upgrades.',
       details: [
         'Backup de arquivos importantes',
@@ -273,7 +281,7 @@ function AppHome({ user, setUser }) {
           <button
             type="button"
             className="serviceOpenButton"
-            onClick={() => abrirChamado(selectedService.title)}
+            onClick={() => abrirChamado(selectedService.formValue)}
           >
             Abrir chamado de {selectedService.title}
           </button>
