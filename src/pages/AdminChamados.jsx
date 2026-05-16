@@ -195,27 +195,49 @@ console.error('Erro e-mail:', emailError)
   }
 
   async function updateStatus(id, status) {
-    const { error } = await supabase
-      .from('chamados')
-      .update({ status })
-      .eq('id', id)
+  const chamadoAtual = chamados.find((c) => c.id === id)
 
-    if (error) {
-      console.error(error)
-      alert('Erro ao atualizar status')
-      return
-    }
+  console.log('STATUS DEBUG - chamado:', chamadoAtual)
+  console.log('STATUS DEBUG - novo status:', status)
 
-    setChamados((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, status } : item
-      )
+  const { error } = await supabase
+    .from('chamados')
+    .update({ status })
+    .eq('id', id)
+
+  if (error) {
+    console.error('Erro ao atualizar status:', error)
+    alert('Erro ao atualizar status')
+    return
+  }
+
+  setChamados((prev) =>
+    prev.map((item) =>
+      item.id === id ? { ...item, status } : item
+    )
+  )
+
+  if (selectedChamado?.id === id) {
+    setSelectedChamado((prev) => ({ ...prev, status }))
+  }
+
+  if (chamadoAtual?.email) {
+    const { data, error: notifyError } = await supabase.functions.invoke(
+      'notificar-cliente-chamado',
+      {
+        body: {
+          ticketId: chamadoAtual.ticket_id,
+          clienteNome: chamadoAtual.nome,
+          clienteEmail: chamadoAtual.email,
+          mensagem: `O status do seu chamado foi atualizado para: ${status}`,
+        },
+      }
     )
 
-    if (selectedChamado?.id === id) {
-      setSelectedChamado((prev) => ({ ...prev, status }))
-    }
+    console.log('STATUS DEBUG - retorno notificação:', data)
+    console.error('STATUS DEBUG - erro notificação:', notifyError)
   }
+}
 
   function abrirDetalhes(chamado) {
     setSelectedChamado(chamado)

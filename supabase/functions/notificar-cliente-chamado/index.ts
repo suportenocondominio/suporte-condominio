@@ -1,8 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 }
 
@@ -21,9 +23,14 @@ serve(async (req) => {
       })
     }
 
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    )
+
     const resendApiKey = Deno.env.get("RESEND_API_KEY")
 
-    const response = await fetch("https://api.resend.com/emails", {
+    const emailResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${resendApiKey}`,
@@ -41,19 +48,66 @@ serve(async (req) => {
             <div style="background:#f4f7fb;padding:16px;border-radius:12px;margin:20px 0;">
               ${mensagem || "Nova atualização disponível no chamado."}
             </div>
-            <p>Acesse o portal para acompanhar a conversa.</p>
+            <p>Acesse o portal ou aplicativo para acompanhar a conversa.</p>
             <p>Atenciosamente,<br/>Suporte no Condomínio</p>
           </div>
         `,
       }),
     })
 
-    const data = await response.json()
+    const emailData = await emailResponse.json()
 
-    return new Response(JSON.stringify({ status: response.status, data }), {
-      status: response.status,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    })
+    const { data: pushTokens, error: pushTokenError } = await supabase
+      .from("push_tokens")
+      .select("expo_push_token,email,platform,updated_at")
+      .eq("email", clienteEmail)
+
+    const pushResponses = []
+
+    if (pushTokens?.length) {
+      for (const item of pushTokens) {
+        const pushResponse = await fetch("https://exp.host/--/api/v2/push/send", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Accept-encoding": "gzip, deflate",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: item.expo_push_token,
+            sound: "default",
+            title: `Chamado #${ticketId}`,
+            body: mensagem || "Você recebeu uma nova atualização.",
+            data: { ticketId },
+          }),
+        })
+
+        const pushData = await pushResponse.json()
+
+        pushResponses.push({
+          token: item.expo_push_token,
+          status: pushResponse.status,
+          data: pushData,
+        })
+      }
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        clienteEmail,
+        emailStatus: emailResponse.status,
+        email: emailData,
+        pushTokenError,
+        pushTokensEncontrados: pushTokens?.length || 0,
+        pushTokens,
+        pushResponses,
+      }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }
+    )
   } catch (error) {
     return new Response(JSON.stringify({ error: String(error) }), {
       status: 500,
